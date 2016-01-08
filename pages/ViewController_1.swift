@@ -365,7 +365,11 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
         case .Loading:
             return 1
         case .NoResults:
-            return results.count
+            if results.count == 0 {
+                return 1
+            } else {
+                return results.count
+            }
         case .Results(_):
             return results.count
         }
