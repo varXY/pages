@@ -16,6 +16,7 @@ struct SearchInfo {
     var memberIndex = 1
     var CSKindID = -1
     var body = [String]()
+    var addition = ""
 }
 
 class Search {
@@ -32,42 +33,42 @@ class Search {
 
 
     func performSearchForText(searchInfo: SearchInfo, completion: SearchComplete) {
-			dataTask?.cancel()
+        dataTask?.cancel()
 
-			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-			state = .Loading
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        state = .Loading
 
-            let url = urlWithSearchText(searchInfo)
-        
-			let session = NSURLSession.sharedSession()
-			dataTask = session.dataTaskWithURL(url, completionHandler: { (data, response, error) -> Void in
+        let url = urlWithSearchText(searchInfo)
+        print(url)
+        let session = NSURLSession.sharedSession()
+        dataTask = session.dataTaskWithURL(url, completionHandler: { (data, response, error) -> Void in
 
-				self.state = .NotSearchedYet
-				var success = false
+            self.state = .NotSearchedYet
+            var success = false
 
-				if let error = error {
-					if error.code == -999 { return }
-				} else if let httpResponse = response as? NSHTTPURLResponse {
-					if httpResponse.statusCode == 200 {
-						if let dictionary = self.parseJOSN(data!) {
-                            let searchResults = self.parseDictionary(searchInfo.typeName, dictionary: dictionary)
-							if searchResults.isEmpty {
-								self.state = .NoResults
-							} else {
-								self.state = .Results(searchResults)
-							}
-							success = true
-						}
-					}
-				}
+            if let error = error {
+                if error.code == -999 { return }
+            } else if let httpResponse = response as? NSHTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    if let dictionary = self.parseJOSN(data!) {
+                        let searchResults = self.parseDictionary(searchInfo.typeName, dictionary: dictionary)
+                        if searchResults.isEmpty {
+                            self.state = .NoResults
+                        } else {
+                            self.state = .Results(searchResults)
+                        }
+                        success = true
+                    }
+                }
+            }
 
-				dispatch_async(dispatch_get_main_queue()) {
+            dispatch_async(dispatch_get_main_queue()) {
 					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-					completion(success)
-				}
-			})
+                completion(success)
+            }
+        })
 
-			dataTask?.resume()
+        dataTask?.resume()
 		
 	}
 
@@ -86,7 +87,10 @@ class Search {
             url = NSURL(string: urlString)!
             print(url)
         case "carService":
-            let urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@&kindId=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4], "\(searchInfo.CSKindID)")
+            var urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@&kindId=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4], "\(searchInfo.CSKindID)")
+            
+            urlString += searchInfo.addition
+            
             url = NSURL(string: urlString)!
         default:
             break

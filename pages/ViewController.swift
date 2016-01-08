@@ -69,7 +69,7 @@ class ViewController: UIViewController {
             var searchInfo = SearchInfo()
             
             searchInfo.typeName = "carService"
-            searchInfo.body = ["\(numbers[0] as! Int)", "30.12164", "140.121654", "1", "30",]
+            searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
             searchInfo.CSKindID = numbers[1] as! Int
             
             let VC = ViewController_1()

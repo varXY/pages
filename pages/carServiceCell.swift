@@ -93,7 +93,7 @@ class CarServiceCell: UITableViewCell {
         if let range = result.price.rangeOfString(".00") {
             result.price.removeRange(range)
         }
-        priceLabel.text = "¥" + result.price
+        priceLabel.text = result.price != "0.01" ? "¥" + result.price : "面议"
         
         companyLabel.text = result.company
         

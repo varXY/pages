@@ -22,7 +22,12 @@ class ViewController_1: UIViewController {
     var success = true
     var subButtonsInView = false
     
+    var loadMoreFooterView: LoadMoreTableFooterView?
+    var loadingMore: Bool = false
+    var loadingMoreShowing: Bool = false
+    
     let search = Search()
+    var page = 1
     
     var searchInfo = SearchInfo()
     
@@ -48,13 +53,48 @@ class ViewController_1: UIViewController {
         contentView.addSubview(scrolling)
         
         tableView.tableHeaderView = contentView
+        
+        if loadMoreFooterView == nil {
+            loadMoreFooterView = LoadMoreTableFooterView(frame: CGRectMake(0, tableView.contentSize.height, tableView.frame.size.width, tableView.frame.size.height))
+            loadMoreFooterView!.delegate = self
+            loadMoreFooterView!.backgroundColor = UIColor.clearColor()
+            tableView.addSubview(loadMoreFooterView!)
+        }
+        delayLoadFinish()
     
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        performSearch(Info: searchInfo)
+//        performSearch(info: searchInfo)
+    }
+    
+    func delayLoadFinish() {
+        if (loadingMore) {
+            doneLoadingMoreTableViewData()
+        }
+        
+        loadingMoreShowing = true
+//        let itemsCount = 30
+//        if (itemsCount != 30) {
+//            loadingMoreShowing = false
+//        } else {
+//            loadingMoreShowing = true
+//        }
+        if (!loadingMoreShowing) {
+            tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        }
+        
+        performSearch(info: searchInfo)
+//        tableView.reloadData()
+    }
+    
+    func makeDatas() {
+        self.page += 1
+        
+        self.searchInfo.body[3] = String(self.page)
+        performSearch(info: searchInfo)
     }
     
     func filtered(button: UIButton) {
@@ -115,7 +155,15 @@ class ViewController_1: UIViewController {
     
     
     func smallFilterTapped(sender: UIButton) {
-        print(sender.tag)
+        self.results.removeAll()
+        self.page = 1
+        self.searchInfo.body[3] = "1"
+        
+        for i in 0..<4 {
+            if let button = tableView.tableHeaderView?.subviews[0].subviews[i] as? UIButton {
+                button.enabled = false
+            }
+        }
         
         if sender.tag < 230 {
             if let button = tableView.tableHeaderView?.subviews[0].subviews[0] as? UIButton {
@@ -126,8 +174,9 @@ class ViewController_1: UIViewController {
                 }
             }
             
-            self.searchInfo.CSKindID = kindIDFromIndex(sender.tag - 210)
-            performSearch(Info: searchInfo)
+            searchInfo.CSKindID = kindIDFromIndex(sender.tag - 210)
+            searchInfo.addition = ""
+            performSearch(info: searchInfo)
             let bigButtonTag = 200 + 110
             if let subView = self.view.viewWithTag(bigButtonTag) {
                 subView.removeFromSuperview()
@@ -137,9 +186,49 @@ class ViewController_1: UIViewController {
         if sender.tag >= 230 && sender.tag < 260 {
             
             var index = 0
-            if sender.tag < 240 { index = 0 }
-            if sender.tag < 250 && sender.tag >= 240 { index = 1 }
-            if sender.tag < 260 && sender.tag >= 250 { index = 2 }
+            
+            if sender.tag < 240 {
+                index = 0
+                
+                if sender.tag == 230 {
+                    searchInfo.addition = ""
+                } else if sender.tag == 235 {
+                    searchInfo.addition = ""
+                    customFilter(0)
+                } else {
+                    let factor = sender.tag - 231
+                    let minPrice = 500 * factor
+                    let maxPrice = 500 * (factor + 1)
+                    searchInfo.addition = "&minPrice=\(minPrice)&maxPrice=\(maxPrice)"
+                }
+                
+            }
+            
+            if sender.tag < 250 && sender.tag >= 240 {
+                index = 1
+                
+                if sender.tag == 240 {
+                    searchInfo.addition = ""
+                } else if sender.tag == 245 {
+                    searchInfo.addition = ""
+                    customFilter(1)
+                } else if sender.tag == 244 {
+                    let distance = 20.0
+                    searchInfo.addition = "&distance=\(distance)"
+                } else {
+                    let factor = sender.tag - 240
+                    let distance = factor == 1 ? 10.0 : 50.0 * Double(factor - 1)
+                    searchInfo.addition = "&distance=\(distance)"
+                }
+
+            }
+            
+            if sender.tag < 260 && sender.tag >= 250 {
+                index = 2
+                
+                let orderType = sender.tag - 249
+                searchInfo.addition = "&orderType=\(orderType)"
+            }
             
             self.Titles_123[index] = (sender.titleLabel?.text)!
             
@@ -154,6 +243,8 @@ class ViewController_1: UIViewController {
             if let subView = self.view.viewWithTag(bigButtonTag) {
                 subView.removeFromSuperview()
             }
+            
+            performSearch(info: searchInfo)
         }
         
     }
@@ -170,18 +261,93 @@ class ViewController_1: UIViewController {
         return kindID
     }
     
-    func performSearch(Info searchInfo: SearchInfo) {
+    func customFilter(type: Int) {
+        
+        var title = ""
+        var placeholder_0 = ""
+        var placeholder_1 = ""
+        
+        switch type {
+        case 0:
+            title = "自定义价格"
+            placeholder_0 = "最低价格"
+            placeholder_1 = "最高价格"
+        case 1:
+            title = "自定义距离"
+            placeholder_0 = "距离范围"
+        default:
+            break
+        }
+        
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .Alert)
+        
+        let saveAction = UIAlertAction(title: "确定", style: .Default) { (action) -> Void in
+            if type == 0 {
+                if let minPrice = alert.textFields![0].text {
+                    if let maxPrice = alert.textFields![1].text {
+                        self.searchInfo.addition = "&minPrice=\(minPrice)&maxPrice=\(maxPrice)"
+                        self.searchInfo.body[3] = "1"
+                        self.results.removeAll()
+                        self.performSearch(info: self.searchInfo)
+                    }
+                }
+                
+                
+            } else {
+                if let distance = alert.textFields![0].text {
+                    self.searchInfo.addition = "&distance=\(distance)"
+                    self.searchInfo.body[3] = "1"
+                    self.results.removeAll()
+                    self.performSearch(info: self.searchInfo)
+                }
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .Default) { (action) -> Void in
+        }
+        
+        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.placeholder = placeholder_0
+            textField.keyboardType = .DecimalPad
+        }
+        
+        if type == 0 {
+            alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+                textField.placeholder = placeholder_1
+                textField.keyboardType = .DecimalPad
+            }
+        }
+        
+        
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func performSearch(info searchInfo: SearchInfo) {
         search.performSearchForText(searchInfo) { (success) -> Void in
+            
+            if !success {
+                print("something wrong with net work")
+            }
             
             switch self.search.state {
             case .Results(let list):
-                self.results = list as! [CSResult]
-                self.tableView.reloadData()
+                self.results += list as! [CSResult]
             default:
-                print("someting wrong")
+                break
             }
             
-            self.success = success
+            self.tableView.reloadData()
+            
+            for i in 0..<4 {
+                if let button = self.tableView.tableHeaderView?.subviews[0].subviews[i] as? UIButton {
+                    button.enabled = true
+                }
+            }
+            
+            self.doneLoadingMoreTableViewData()
         }
     }
     
@@ -199,9 +365,9 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
         case .Loading:
             return 1
         case .NoResults:
-            return 1
-        case .Results(let list):
-            return list.count
+            return results.count
+        case .Results(_):
+            return results.count
         }
     }
     
@@ -227,13 +393,22 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             return cell
             
         case .NoResults:
-            let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
-            cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
-            cell.textLabel?.text = "无结果"
-            return cell
+            if self.results.count != 0 {
+                let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
+                cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
+                let result = results[indexPath.row]
+                cell.configureForCell(result)
+                return cell
+            } else {
+                let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
+                cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
+                cell.textLabel?.text = "无结果"
+                cell.textLabel?.textAlignment = .Center
+                return cell
+            }
             
-        case .Results(let list):
-            self.results = list as! [CSResult]
+            
+        case .Results(_):
             let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
             cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
             let result = results[indexPath.row]
@@ -252,16 +427,44 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
 
 
 extension ViewController_1: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        print(__FUNCTION__)
-        print(scrollView.contentSize)
-        print(scrollView.contentOffset)
-        
-        if scrollView.contentSize.height - scrollView.contentOffset.y == self.view.frame.height {
-            
+    
+    func scrollViewDidScroll(scrollView: UIScrollView)
+    {
+        if (loadingMoreShowing) {
+            loadMoreFooterView!.loadMoreScrollViewDidScroll(scrollView)
+        }
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if (loadingMoreShowing) {
+            loadMoreFooterView!.loadMoreScrollViewDidEndDragging(scrollView)
         }
     }
 }
+
+extension ViewController_1: LoadMoreTableFooterViewDelegate {
+    
+    func loadMoreTableFooterDidTriggerRefresh(view: LoadMoreTableFooterView) {
+        loadMoreTableViewDataSource()
+    }
+    
+    func loadMoreTableFooterDataSourceIsLoading(view: LoadMoreTableFooterView) -> Bool {
+        return loadingMore
+    }
+    
+    // ViewController function
+    func loadMoreTableViewDataSource() {
+        loadingMore = true
+        makeDatas()
+    }
+    
+    func doneLoadingMoreTableViewData() {
+        loadingMore = false
+        loadMoreFooterView!.loadMoreScrollViewDataSourceDidFinishedLoading(tableView)
+    }
+}
+
+
 
 
 

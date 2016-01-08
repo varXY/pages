@@ -11,7 +11,7 @@ import UIKit
 extension UIImageView {
 
 	func loadImageWithURl(url: NSURL) -> NSURLSessionDownloadTask {
-        
+
         let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         indicator.startAnimating()
         indicator.frame = self.bounds
