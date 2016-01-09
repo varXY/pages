@@ -35,7 +35,7 @@ class ViewController_1: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()
         
-        tableView.frame = self.view.bounds
+        tableView.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - 64)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorColor = UIColor.clearColor()
@@ -43,11 +43,15 @@ class ViewController_1: UIViewController {
         
         let contentView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 200))
         
-        let filterView = FilterView(title: filterTitle)
+        let filterView = FilterView(title: filterTitle, type: searchInfo.body[0])
         filterView.sender = { (button: UIButton) -> Void in
             self.filtered(button)
         }
-        contentView.addSubview(filterView)
+        self.view.addSubview(filterView)
+        
+        let backgroundView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 40))
+        backgroundView.backgroundColor = UIColor.lightGrayColor()
+        contentView.addSubview(backgroundView)
         
         let scrolling = pView.getScrollingForTable(self)
         contentView.addSubview(scrolling)
@@ -98,7 +102,6 @@ class ViewController_1: UIViewController {
     }
     
     func filtered(button: UIButton) {
-        print(button.tag)
         
         switch button.tag {
             
@@ -108,15 +111,15 @@ class ViewController_1: UIViewController {
             } else {
                 removeOtherSubButtonsView(button.tag)
                 
-                let filterView = FilterView(title: filterTitle)
+                let filterView = FilterView(title: filterTitle, type: searchInfo.body[0])
                 
-                if let button = tableView.tableHeaderView?.subviews[0].subviews[0] as? UIButton {
+                if let button = self.view.subviews[1].subviews[0] as? UIButton {
                     self.filterTitle = (button.titleLabel?.text)!
                 }
                 
                 let subView = filterView.ButtonsView_0(self)
                 subView.tag = button.tag + 110
-                self.tableView.addSubview(subView)
+                self.view.addSubview(subView)
             }
 
             
@@ -126,10 +129,10 @@ class ViewController_1: UIViewController {
             } else {
                 removeOtherSubButtonsView(button.tag)
                 
-                let filterView = FilterView(title: Titles_123[button.tag - 201])
+                let filterView = FilterView(title: Titles_123[button.tag - 201], type: searchInfo.body[0])
                 let subView = filterView.buttonsView_123(button.tag - 200, viewController: self)
                 subView.tag = button.tag + 110
-                self.tableView.addSubview(subView)
+                self.view.addSubview(subView)
             }
             
         default:
@@ -160,13 +163,13 @@ class ViewController_1: UIViewController {
         self.searchInfo.body[3] = "1"
         
         for i in 0..<4 {
-            if let button = tableView.tableHeaderView?.subviews[0].subviews[i] as? UIButton {
+            if let button = self.view.subviews[1].subviews[i] as? UIButton {
                 button.enabled = false
             }
         }
         
         if sender.tag < 230 {
-            if let button = tableView.tableHeaderView?.subviews[0].subviews[0] as? UIButton {
+            if let button = self.view.subviews[1].subviews[0] as? UIButton {
                 button.setTitle(sender.titleLabel?.text, forState: .Normal)
                 
                 if let imageView = button.subviews[0] as? UIImageView {
@@ -174,7 +177,11 @@ class ViewController_1: UIViewController {
                 }
             }
             
-            searchInfo.CSKindID = kindIDFromIndex(sender.tag - 210)
+            if sender.tag == 220 {
+                searchInfo.CSKindID = 0
+            } else {
+                searchInfo.CSKindID = kindIDFromIndex(sender.tag - 210)
+            }
             searchInfo.addition = ""
             performSearch(info: searchInfo)
             let bigButtonTag = 200 + 110
@@ -232,7 +239,7 @@ class ViewController_1: UIViewController {
             
             self.Titles_123[index] = (sender.titleLabel?.text)!
             
-            if let button = tableView.tableHeaderView?.subviews[0].subviews[index + 1] as? UIButton {
+            if let button = self.view.subviews[1].subviews[index + 1] as? UIButton {
                 
                 if let imageView = button.subviews[0] as? UIImageView {
                     imageView.image = UIImage(named: "下拉")
@@ -246,6 +253,8 @@ class ViewController_1: UIViewController {
             
             performSearch(info: searchInfo)
         }
+        
+        self.tableView.contentOffset.y = 0.0
         
     }
     
@@ -342,7 +351,7 @@ class ViewController_1: UIViewController {
             self.tableView.reloadData()
             
             for i in 0..<4 {
-                if let button = self.tableView.tableHeaderView?.subviews[0].subviews[i] as? UIButton {
+                if let button = self.view.subviews[1].subviews[i] as? UIButton {
                     button.enabled = true
                 }
             }
@@ -414,7 +423,6 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             
         case .Results(_):
             let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
-            cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
             let result = results[indexPath.row]
             cell.configureForCell(result)
             return cell

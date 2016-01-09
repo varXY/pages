@@ -72,7 +72,7 @@ class PView: NSObject {
 
     
     func getPageForCarServices(VC: UIViewController) {
-        let scrollView = UIScrollView(frame: VC.view.frame)
+        let scrollView = UIScrollView(frame: CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height - 64))
         let height = screenSize.height * (h0 + h1 + h2 + h3) + 20
         scrollView.contentSize = CGSizeMake(0, height)
         VC.view.addSubview(scrollView)

@@ -41,7 +41,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NBW-ae-Y2b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="734" y="702"/>
+            <point key="canvasLocation" x="728" y="803"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="vbT-Ql-vCB">
@@ -54,18 +54,17 @@
                     </tabBar>
                     <connections>
                         <segue destination="hil-i2-htj" kind="relationship" relationship="viewControllers" id="ids-WA-QhP"/>
-                        <segue destination="Ng6-Sg-ItS" kind="relationship" relationship="viewControllers" id="9Ge-fH-CiK"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gIv-a8-NIV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-816" y="372"/>
         </scene>
-        <!--Item-->
+        <!--车服务-->
         <scene sceneID="kmw-g5-xtX">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hil-i2-htj" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="d97-cq-Hji"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hil-i2-htj" customClass="MainNavigationController" customModule="pages" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="车服务" id="d97-cq-Hji"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="U06-Yk-0OA">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -74,6 +73,7 @@
                     <nil name="viewControllers"/>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="o07-wX-R4L"/>
+                        <segue destination="Ng6-Sg-ItS" kind="presentation" identifier="useless" id="iZD-kr-vKM"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rDR-aM-7Zh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -97,7 +97,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wLG-bo-9oz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4" y="702"/>
+            <point key="canvasLocation" x="4" y="803"/>
         </scene>
     </scenes>
 </document>

@@ -10,6 +10,8 @@ import Foundation
 
 class PModel {
     
+    var titles = ["汽车维修", "汽车美容" ,"增值服务", "行业资讯"]
+    
     func getURL(index: Int) -> NSURL? {
         var url = NSURL()
         var string = ""
@@ -123,6 +125,33 @@ class PModel {
             url = NSURL(string: escapedString!)!
             return url
         }
+        
+    }
+    
+    func getRequest(index: Int) -> NSURLRequest {
+        let type = [3, 2, 2]
+        let type2 = -1
+        var url = NSURL()
+        
+        if index == 0 {
+            url = NSURL(string: "http://www.cncar.net/jq/carservice-index.html")!
+        }
+        
+        if index > 0 && index < 4 {
+            let title = titles[index - 1].stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+            let typeA = "\(type[index - 1])"
+            let typeB = "\(type2)"
+            let string = String(format: "http://www.cncar.net/jq/carservice-servicelist.html?type=%@&type2=%@&title=%@", typeA, typeB, title!)
+            url = NSURL(string: string)!
+        }
+        
+        if index == 4 {
+            url = NSURL(string: "http://www.cncar.net/jq/carservice-infoindex.html")!
+        }
+        
+        let request = NSURLRequest(URL: url)
+        
+        return request
         
     }
     

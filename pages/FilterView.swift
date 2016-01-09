@@ -30,7 +30,7 @@ class FilterView: UIView {
     
     var subButtons_0 = UIView()
     
-    init(title: String) {
+    init(title: String, type: String) {
         super.init(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, 40))
         
         self.title = title
@@ -38,11 +38,22 @@ class FilterView: UIView {
         
         addButtons(title)
         
-        for titles in [type_titles_0, type_titles_1, type_titles_2] {
-            if let _ = titles.indexOf(title) {
-                self.selectedTitles = titles
+        if title != "全部" {
+            for titles in [type_titles_0, type_titles_1, type_titles_2] {
+                if let _ = titles.indexOf(title) {
+                    self.selectedTitles = titles
+                }
+            }
+        } else {
+            print(type + "look here!!!!!!!!!!!")
+            switch type {
+            case "1": self.selectedTitles = type_titles_1
+            case "2": self.selectedTitles = type_titles_0
+            case "3": self.selectedTitles = type_titles_2
+            default: break
             }
         }
+        
 
     }
     
@@ -69,7 +80,6 @@ class FilterView: UIView {
         }
         
         for button in self.subviews {
-            print(button.frame.width)
             let imageView = UIImageView(image: UIImage(named: "下拉"))
             imageView.frame = CGRectMake(button.frame.width - 15, 17.5, 8, 5)
             button.tintColor = UIColor.blackColor()
@@ -98,7 +108,7 @@ class FilterView: UIView {
                 for view in self.subviews {
                     if let btn = view as? UIButton {
                         if btn != sender {
-                            changeButtonsImage(btn)
+                            FilterView.changeButtonsImage(btn)
                         }
                     }
                 }
@@ -109,7 +119,7 @@ class FilterView: UIView {
                 for view in self.subviews {
                     if let btn = view as? UIButton {
                         if btn != sender {
-                            changeButtonsImage(btn)
+                            FilterView.changeButtonsImage(btn)
                         }
                     }
                 }
@@ -119,7 +129,7 @@ class FilterView: UIView {
         }
     }
     
-    func changeButtonsImage(sender: UIButton) {
+    class func changeButtonsImage(sender: UIButton) {
         if let imageView = sender.subviews[0] as? UIImageView {
             
             if imageView.image == UIImage(named: "收起") {
@@ -160,7 +170,6 @@ class FilterView: UIView {
         for view in contentView.subviews {
             if let button = view as? UIButton {
                 if button.titleLabel?.text == viewController.filterTitle {
-                    print(viewController.filterTitle)
                     button.layer.borderColor = UIColor.orangeColor().CGColor
                     
                     let imageView = UIImageView(frame: CGRectMake(button.frame.width - 9, button.frame.height - 12, 9, 12))

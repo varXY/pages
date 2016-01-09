@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C3238A2D1C3F9B3500081E6E /* LoadMoreTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3238A2C1C3F9B3500081E6E /* LoadMoreTableFooterView.swift */; };
+		C339C2291C4095C700947247 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339C2281C4095C700947247 /* MainNavigationController.swift */; };
+		C339C22B1C40963200947247 /* UIImage+ColorImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339C22A1C40963200947247 /* UIImage+ColorImage.swift */; };
 		C341A7FC1C3DF037003049EE /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C341A7FB1C3DF037003049EE /* FilterView.swift */; };
 		C3466C221C3CA98300979FAF /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466C211C3CA98300979FAF /* Search.swift */; };
 		C3466C241C3CA98B00979FAF /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466C231C3CA98B00979FAF /* SearchResult.swift */; };
@@ -34,6 +36,8 @@
 		3B9D795083DE1040DC8777C3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7233EC591672C24A8BA5CD8B /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3238A2C1C3F9B3500081E6E /* LoadMoreTableFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreTableFooterView.swift; sourceTree = "<group>"; };
+		C339C2281C4095C700947247 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		C339C22A1C40963200947247 /* UIImage+ColorImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+ColorImage.swift"; sourceTree = "<group>"; };
 		C341A7FB1C3DF037003049EE /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		C3466C211C3CA98300979FAF /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		C3466C231C3CA98B00979FAF /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				C3D73FCF1C34AEF500C82CFA /* AppDelegate.swift */,
+				C339C2281C4095C700947247 /* MainNavigationController.swift */,
 				C3D73FD11C34AEF500C82CFA /* ViewController.swift */,
 				C360329D1C3A05F2008852CA /* ViewController_1.swift */,
 				C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */,
@@ -121,6 +126,7 @@
 				C3466C231C3CA98B00979FAF /* SearchResult.swift */,
 				C3238A2C1C3F9B3500081E6E /* LoadMoreTableFooterView.swift */,
 				C3466C251C3CA9CA00979FAF /* String+en:decode.swift */,
+				C339C22A1C40963200947247 /* UIImage+ColorImage.swift */,
 				C3466C291C3CB5BC00979FAF /* UIImageView+DownloadImage.swift */,
 				C36032A01C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.h */,
 				C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */,
@@ -264,6 +270,8 @@
 				C3466C2A1C3CB5BC00979FAF /* UIImageView+DownloadImage.swift in Sources */,
 				C3466C261C3CA9CA00979FAF /* String+en:decode.swift in Sources */,
 				C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */,
+				C339C2291C4095C700947247 /* MainNavigationController.swift in Sources */,
+				C339C22B1C40963200947247 /* UIImage+ColorImage.swift in Sources */,
 				C3D73FD01C34AEF500C82CFA /* AppDelegate.swift in Sources */,
 				C3B15BBF1C3B657F00E12142 /* CustomPop.swift in Sources */,
 				C3A7C75F1C350E2400E6DC4B /* WebViewController.swift in Sources */,

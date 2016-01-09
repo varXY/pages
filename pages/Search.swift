@@ -85,9 +85,12 @@ class Search {
         case "personInfo":
             let urlString = String(format: "http://dreamcar.cncar.net/appFCLoadPersonInfo.do?channelId=%@", searchInfo.body[0])
             url = NSURL(string: urlString)!
-            print(url)
         case "carService":
-            var urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@&kindId=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4], "\(searchInfo.CSKindID)")
+            var urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4])
+            
+            if searchInfo.CSKindID != 0 {
+                urlString += "&kindId=\(searchInfo.CSKindID)"
+            }
             
             urlString += searchInfo.addition
             
@@ -200,7 +203,6 @@ class Search {
         }
         
         if type == "carService" {
-            print(CSResults.count)
             return CSResults
         } else {
             return searchResults

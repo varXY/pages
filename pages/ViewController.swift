@@ -12,10 +12,18 @@ class ViewController: UIViewController {
     
     let pView = PView()
     let pModel = PModel()
+    
+    var segmentControl = UISegmentedControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()
+        
+        segmentControl = UISegmentedControl(items: pModel.titles)
+        for i in 0..<4 { segmentControl.setWidth(75, forSegmentAtIndex: i) }
+        segmentControl.selectedSegmentIndex = UISegmentedControlNoSegment
+        segmentControl.addTarget(self, action: "segmentSelected:", forControlEvents: UIControlEvents.AllEvents)
+        self.navigationItem.titleView = segmentControl
         
         pView.getPageForCarServices(self)
     }
@@ -25,8 +33,54 @@ class ViewController: UIViewController {
 
     }
     
+    func segmentSelected(sender: UISegmentedControl) {
+        
+        if sender.selectedSegmentIndex != -1 {
+            var numbers = [AnyObject]()
+            
+            switch sender.selectedSegmentIndex {
+            case 0:
+                numbers = [2, -1, "汽车维修"]
+            case 1:
+                numbers = [1, -1, "汽车美容"]
+            case 2:
+                numbers = [3, -1, "增值服务"]
+            case 3:
+                let webVC = WebViewController()
+                let url = NSURL(string: "http://www.cncar.net/jq/carservice-infoindex.html")!
+                webVC.url = url
+                webVC.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(webVC, animated: true)
+            default:
+                break
+            }
+            
+            if numbers.count != 0 { segmentJump(numbers) }
+            
+        }
+        
+        segmentControl.selectedSegmentIndex = UISegmentedControlNoSegment
+    }
+    
+    func segmentJump(numbers: AnyObject) {
+        
+        var searchInfo = SearchInfo()
+        searchInfo.typeName = "carService"
+        searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
+//        searchInfo.CSKindID = numbers[1] as! Int
+        searchInfo.CSKindID = 0
+        
+        let VC = ViewController_1()
+        VC.searchInfo = searchInfo
+        VC.title = numbers[2] as? String
+        VC.filterTitle = "全部"
+        VC.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(VC, animated: true)
+    }
+    
     func indexToKindID(index: Int) -> [AnyObject]{
         var numbers = [AnyObject]()
+        
         if index > 2 && index < 11 {
             numbers.append(2)
             switch index {
@@ -58,12 +112,44 @@ class ViewController: UIViewController {
             }
         }
         
+        if index > 12 && index < 21 {
+            numbers.append(1)
+            switch index {
+            case 13:
+                numbers.append(336)
+                numbers.append("车身贴膜")
+            case 14:
+                numbers.append(338)
+                numbers.append("美容养护")
+            case 15:
+                numbers.append(339)
+                numbers.append("音响改装")
+            case 16:
+                numbers.append(341)
+                numbers.append("车窗贴膜")
+            case 17:
+                numbers.append(343)
+                numbers.append("照明改装")
+            case 18:
+                numbers.append(345)
+                numbers.append("空力改装")
+            case 19:
+                numbers.append(344)
+                numbers.append("轮胎轮毂")
+            case 20:
+                numbers.append(342)
+                numbers.append("电子升级")
+            default: break
+            }
+        }
+        
         return numbers
     }
     
     func openURL(sender: UIButton) {
         print(sender.tag - 10101)
         let index = sender.tag - 10101
+        
         if  index > 2 &&  index < 11 {
             let numbers = indexToKindID(index)
             var searchInfo = SearchInfo()
@@ -78,6 +164,22 @@ class ViewController: UIViewController {
             VC.filterTitle = numbers[2] as! String
             VC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(VC, animated: true)
+            
+        } else if index > 12 && index < 21 {
+            let numbers = indexToKindID(index)
+            var searchInfo = SearchInfo()
+            
+            searchInfo.typeName = "carService"
+            searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
+            searchInfo.CSKindID = numbers[1] as! Int
+            
+            let VC = ViewController_1()
+            VC.searchInfo = searchInfo
+            VC.title = "汽车美容"
+            VC.filterTitle = numbers[2] as! String
+            VC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(VC, animated: true)
+            
         } else {
             let webVC = WebViewController()
             if let url = pModel.getURL(sender.tag - 10101) {

@@ -18,6 +18,7 @@ class WebViewController: UIViewController {
         self.fd_interactivePopDisabled = true
         
         let webView = UIWebView(frame: view.bounds)
+        webView.frame.size.height -= 64
         webView.loadRequest(NSURLRequest(URL: url))
         view.addSubview(webView)
     }
