@@ -30,7 +30,22 @@ class PView: NSObject {
     var atTheEnd = false
     
     func getScrollingForTable(VC: UIViewController) -> UIScrollView {
-        let imageNames = ["汽车维修1", "汽车维修2"]
+        var imageNames = ["汽车维修1", "汽车维修2"]
+
+        if let VC_1 = VC as? ViewController_1 {
+            switch VC_1.searchInfo.body[0] {
+            case "1":
+                imageNames = ["汽车美容1", "汽车美容2"]
+            case "2":
+                imageNames = ["汽车维修1", "汽车维修2"]
+            case "3":
+                imageNames = ["增值服务1", "增值服务2"]
+            default:
+                break
+            }
+        }
+        
+        
         let frame = CGRect(x: 0, y: 40, width: screenSize.width, height: 160)
         let scrolling = scrollingImagesView(frame, imagesCount: 2, imageNames: imageNames)
         scrolling.delegate = self

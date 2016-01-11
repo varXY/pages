@@ -70,7 +70,7 @@ class ViewController_1: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.navigationController?.setToolbarHidden(true, animated: true)
 //        performSearch(info: searchInfo)
     }
     
@@ -162,6 +162,8 @@ class ViewController_1: UIViewController {
         self.page = 1
         self.searchInfo.body[3] = "1"
         
+        print(sender.tag)
+        
         for i in 0..<4 {
             if let button = self.view.subviews[1].subviews[i] as? UIButton {
                 button.enabled = false
@@ -177,8 +179,9 @@ class ViewController_1: UIViewController {
                 }
             }
             
-            if sender.tag == 220 {
-                searchInfo.CSKindID = 0
+            if sender.tag == 210 {
+                print("kind id is set as -1")
+                searchInfo.CSKindID = -1
             } else {
                 searchInfo.CSKindID = kindIDFromIndex(sender.tag - 210)
             }
@@ -220,11 +223,11 @@ class ViewController_1: UIViewController {
                     searchInfo.addition = ""
                     customFilter(1)
                 } else if sender.tag == 244 {
-                    let distance = 20.0
+                    let distance = 20
                     searchInfo.addition = "&distance=\(distance)"
                 } else {
                     let factor = sender.tag - 240
-                    let distance = factor == 1 ? 10.0 : 50.0 * Double(factor - 1)
+                    let distance = factor == 1 ? 1 : 5 * Double(factor - 1)
                     searchInfo.addition = "&distance=\(distance)"
                 }
 
@@ -260,11 +263,19 @@ class ViewController_1: UIViewController {
     
     func kindIDFromIndex(index: Int) -> Int {
         var kindID = -1
-        
-        if index != 11 {
-            kindID = index + 345
-        } else {
-            kindID = 436
+        switch searchInfo.body[0] {
+        case "2":
+            if index != 11 {
+                kindID = index + 345
+            } else {
+                kindID = 436
+            }
+        case "1":
+            kindID = index + 335
+        case "3":
+            kindID = index + 355
+        default:
+            break
         }
         
         return kindID
@@ -402,7 +413,6 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             indicator.startAnimating()
             indicator.frame = cell.bounds
             cell.contentView.addSubview(indicator)
-
             return cell
             
         case .NoResults:
@@ -434,6 +444,16 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        
+        let VC_2 = ViewController_2()
+        VC_2.hidesBottomBarWhenPushed = true
+        VC_2.request = NSURLRequest(URL: NSURL(string: String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid))!)
+        self.navigationController?.pushViewController(VC_2, animated: true)
+        
+//        let webVC = WebViewController()
+//        let string = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid)
+//        webVC.url = NSURL(string: string)!
+//        self.navigationController?.pushViewController(webVC, animated: true)
     }
 }
 

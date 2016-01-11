@@ -17,6 +17,7 @@ struct SearchInfo {
     var CSKindID = -1
     var body = [String]()
     var addition = ""
+    var itemID = ""
 }
 
 class Search {
@@ -75,18 +76,19 @@ class Search {
 	// MARK: - Networking
 
     private func urlWithSearchText(searchInfo: SearchInfo) -> NSURL {
+        var urlString = ""
         var url = NSURL()
         
         switch searchInfo.typeName {
         case "member":
             let string = "\(searchInfo.memberIndex)"
-            let urlString = String(format: "http://www.cncar.net/api/app/member.php?username=13971244139&type=%@&distance=10", string)
-            url = NSURL(string: urlString)!
+            urlString = String(format: "http://www.cncar.net/api/app/member.php?username=13971244139&type=%@&distance=10", string)
+            
         case "personInfo":
-            let urlString = String(format: "http://dreamcar.cncar.net/appFCLoadPersonInfo.do?channelId=%@", searchInfo.body[0])
-            url = NSURL(string: urlString)!
+            urlString = String(format: "http://dreamcar.cncar.net/appFCLoadPersonInfo.do?channelId=%@", searchInfo.body[0])
+            
         case "carService":
-            var urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4])
+            urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4])
             
             if searchInfo.CSKindID != 0 {
                 urlString += "&kindId=\(searchInfo.CSKindID)"
@@ -94,12 +96,15 @@ class Search {
             
             urlString += searchInfo.addition
             
-            url = NSURL(string: urlString)!
+            
+        case "item":
+            urlString = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", searchInfo.itemID)
+            
         default:
             break
         }
         
-        
+        url = NSURL(string: urlString)!
 		return url
 	}
 

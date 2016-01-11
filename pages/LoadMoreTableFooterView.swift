@@ -62,10 +62,10 @@ class LoadMoreTableFooterView: UIView {
     func setState(aState: LoadMoreState) {
         switch aState {
         case LoadMoreState.LoadMorePulling:
-            statusLabel.text = NSLocalizedString("松开加载更多...", comment: "")
+            statusLabel.text = NSLocalizedString("松开加载更多", comment: "")
             statusLabel.frame = CGRectMake(0, 20, self.frame.size.width, 20)
         case LoadMoreState.LoadMoreNormal:
-            statusLabel.text = NSLocalizedString("上拉加载更多...", comment: "")
+            statusLabel.text = NSLocalizedString("上拉加载更多", comment: "")
             statusLabel.frame = CGRectMake(0, 10, self.frame.size.width, 20)
             activityView.stopAnimating()
         case LoadMoreState.LoadMoreLoading:

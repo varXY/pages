@@ -28,6 +28,8 @@
 		C3D73FDA1C34AEF600C82CFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3D73FD81C34AEF600C82CFA /* LaunchScreen.storyboard */; };
 		C3D73FE21C34AF8B00C82CFA /* PView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D73FE11C34AF8B00C82CFA /* PView.swift */; };
 		C3D73FE41C34AF9D00C82CFA /* PModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D73FE31C34AF9D00C82CFA /* PModel.swift */; };
+		C3F68C0A1C43479700BB7F50 /* ViewController_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F68C091C43479700BB7F50 /* ViewController_2.swift */; };
+		C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F68C0B1C4356F400BB7F50 /* UIColor+CustomColor.swift */; };
 		D4400442AF9BC5E155EBD96A /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233EC591672C24A8BA5CD8B /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +62,8 @@
 		C3D73FDB1C34AEF600C82CFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3D73FE11C34AF8B00C82CFA /* PView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PView.swift; sourceTree = "<group>"; };
 		C3D73FE31C34AF9D00C82CFA /* PModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PModel.swift; sourceTree = "<group>"; };
+		C3F68C091C43479700BB7F50 /* ViewController_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_2.swift; sourceTree = "<group>"; };
+		C3F68C0B1C4356F400BB7F50 /* UIColor+CustomColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+CustomColor.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,7 @@
 				C339C2281C4095C700947247 /* MainNavigationController.swift */,
 				C3D73FD11C34AEF500C82CFA /* ViewController.swift */,
 				C360329D1C3A05F2008852CA /* ViewController_1.swift */,
+				C3F68C091C43479700BB7F50 /* ViewController_2.swift */,
 				C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */,
 				C3466C2B1C3CB68E00979FAF /* TableViewController.swift */,
 				C3D73FE11C34AF8B00C82CFA /* PView.swift */,
@@ -128,6 +133,7 @@
 				C3466C251C3CA9CA00979FAF /* String+en:decode.swift */,
 				C339C22A1C40963200947247 /* UIImage+ColorImage.swift */,
 				C3466C291C3CB5BC00979FAF /* UIImageView+DownloadImage.swift */,
+				C3F68C0B1C4356F400BB7F50 /* UIColor+CustomColor.swift */,
 				C36032A01C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.h */,
 				C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */,
 				C3B15BBE1C3B657F00E12142 /* CustomPop.swift */,
@@ -272,6 +278,7 @@
 				C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */,
 				C339C2291C4095C700947247 /* MainNavigationController.swift in Sources */,
 				C339C22B1C40963200947247 /* UIImage+ColorImage.swift in Sources */,
+				C3F68C0A1C43479700BB7F50 /* ViewController_2.swift in Sources */,
 				C3D73FD01C34AEF500C82CFA /* AppDelegate.swift in Sources */,
 				C3B15BBF1C3B657F00E12142 /* CustomPop.swift in Sources */,
 				C3A7C75F1C350E2400E6DC4B /* WebViewController.swift in Sources */,
@@ -279,6 +286,7 @@
 				C3466C281C3CB32000979FAF /* carServiceCell.swift in Sources */,
 				C3238A2D1C3F9B3500081E6E /* LoadMoreTableFooterView.swift in Sources */,
 				C341A7FC1C3DF037003049EE /* FilterView.swift in Sources */,
+				C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */,
 				C3D73FE21C34AF8B00C82CFA /* PView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
