@@ -14,17 +14,29 @@ class ViewController_2: UIViewController {
     var request = NSURLRequest()
     var webView = UIWebView()
     
+    var item = CSItem()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "产品详情"
+        self.navigationItem.title = item.title
         self.view.backgroundColor = UIColor.whiteColor()
         
         getScrollView()
         getToolBar()
         getSlider()
-        getDetailView("¥100", stars: ["4", "4", "5"])
+        getDetailView("¥" + item.price, stars: ["\(Int(item.star))", "\(Int(item.qstar))", "\(Int(item.astar))"])
         getWebView(request)
-//        getWebView(NSURLRequest(URL: NSURL(string: "http://www.sina.com")!))
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print(item.titleIntact)
+        print(item.company)
+        print(item.address)
+        print(item.content)
+
+
     }
     
     func getScrollView() {
@@ -49,17 +61,27 @@ class ViewController_2: UIViewController {
     }
     
     func getSlider() {
+        
+        var thumbs = [item.thumb, item.thumb1, item.thumb2, item.thumb3, item.thumb4]
+        var imageURLs = [String]()
+                
+        for i in 0..<thumbs.count {
+            if thumbs[i] != "" {
+                imageURLs.append(thumbs[i])
+            }
+        }
+        
         let scrollView = UIScrollView()
         scrollView.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height * 0.4)
-        scrollView.contentSize = CGSizeMake(self.view.frame.width * CGFloat(3), 0)
+        scrollView.contentSize = CGSizeMake(self.view.frame.width * CGFloat(imageURLs.count), 0)
         scrollView.backgroundColor = UIColor.backgroundColor()
         scrollView.pagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         
-        for i in 0..<3 {
+        for i in 0..<imageURLs.count {
             let frame = CGRectMake(scrollView.frame.origin.x + (scrollView.frame.width * CGFloat(i)), 0, scrollView.frame.width, scrollView.frame.height)
             let imageView = UIImageView(frame: frame)
-            imageView.image = UIImage(named: "增值服务2")
+            imageView.loadImageWithURl(NSURL(string: imageURLs[i])!)
             imageView.contentMode = .Center
             imageView.contentMode = .ScaleAspectFit
             scrollView.addSubview(imageView)
@@ -74,6 +96,7 @@ class ViewController_2: UIViewController {
         
         let priceLabel = UILabel(frame: CGRectMake(10, 10, (contentView.frame.width - 20) / 2, (contentView.frame.height-20) / 2))
         priceLabel.text = price
+        priceLabel.textAlignment = .Center
         priceLabel.textColor = UIColor.themeColor()
         priceLabel.font = UIFont.boldSystemFontOfSize(20)
         contentView.addSubview(priceLabel)
@@ -83,6 +106,7 @@ class ViewController_2: UIViewController {
         button.tintColor = UIColor.whiteColor()
         button.layer.cornerRadius = 7
         button.setTitle("立即预约", forState: .Normal)
+        button.addTarget(self, action: "MakeAppointment", forControlEvents: .TouchUpInside)
         contentView.addSubview(button)
         
         let width = (contentView.frame.width - 10) / 5
@@ -112,8 +136,11 @@ class ViewController_2: UIViewController {
         webView = UIWebView(frame: CGRectMake(0, 130 + self.view.frame.height * 0.4, self.view.frame.width, self.view.frame.height))
         webView.delegate = self
         webView.userInteractionEnabled = false
-        webView.loadRequest(request)
-        
+//        webView.loadRequest(request)
+//        webView.scalesPageToFit = true
+        let url = NSURL(string: "http://www.cncar.net/jq/carservice-index.html")
+        webView.loadHTMLString(item.content, baseURL: url)
+        webView.scrollView.contentMode = .ScaleAspectFit
         self.view.addSubview(webView)
     }
     
@@ -124,11 +151,26 @@ class ViewController_2: UIViewController {
 extension ViewController_2 : UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        print(webView.scrollView.contentSize.height)
         if webView.scrollView.contentSize.height <= webView.frame.height {
             webView.frame.size.height = webView.scrollView.contentSize.height
             self.view.frame.size.height -= (webView.frame.size.height - webView.scrollView.contentSize.height)
         }
+        
+//        let webHeight = 0
+        let string = "var script = document.createElement('script');"
+        "script.type = 'text/javascript';"
+        "script.text = \"function ResizeImages() { "
+        "var myimg,oldwidth, newheight;"
+        "var maxwidth=320;" //缩放系数
+        "for(i=0;i <document.images.length;i++){"
+        "myimg = document.images;"
+        "myimg.setAttribute('style','max-width:320px;height:auto')"
+        "}"
+        "}\";"
+        "document.getElementsByTagName('head')[0].appendChild(script);"
+        webView.stringByEvaluatingJavaScriptFromString(string)
+        webView.stringByEvaluatingJavaScriptFromString("ResizeImages();")
+        print(__FUNCTION__)
     }
 }
 
@@ -145,12 +187,24 @@ extension ViewController_2 : UIScrollViewDelegate {
 
 extension ViewController_2 {
     
+    func MakeAppointment() {
+        let string = String(format: "http://www.cncar.net/jq/carservice-servicelist-reserve.html?itemid=%@&itemname=%@&company=%@", item.itemID, item.title, item.company )
+        let webVC = WebViewController()
+        webVC.url = NSURL(string: string)!
+        self.navigationController?.pushViewController(webVC, animated: true)
+    }
+    
     func navi() {
+        let searchResult = SearchResult()
+        searchResult.latitude = item.latitude
+        searchResult.longitude = item.longitude
+        searchResult.name = item.company
         
+        loadServices.useAppleMap(searchResult)
     }
     
     func call() {
-        
+        loadServices.call(self, number: item.telephone)
     }
     
     func seeComment() {

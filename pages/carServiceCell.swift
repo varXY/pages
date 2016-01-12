@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CarServiceCell: UITableViewCell {
+class CarServiceCell : UITableViewCell {
     
     
     var picView = UIImageView()
@@ -25,7 +25,7 @@ class CarServiceCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = UIColor.lightGrayColor()
+        self.backgroundColor = UIColor.backgroundColor()
         
         let contentView = UIView(frame: CGRectMake(0, 5, UIScreen.mainScreen().bounds.width, 120))
         contentView.backgroundColor = UIColor.whiteColor()
@@ -48,7 +48,7 @@ class CarServiceCell: UITableViewCell {
         distanceLabel.font = UIFont.italicSystemFontOfSize(12)
         
         priceLabel.frame = CGRectMake(contentView.frame.width - 110, roundPic.frame.origin.y - 5, 100, 30)
-        priceLabel.textColor = UIColor.orangeColor()
+        priceLabel.textColor = UIColor.themeColor()
         priceLabel.textAlignment = .Right
         
         companyLabel.frame = CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 110, 10)
@@ -81,8 +81,10 @@ class CarServiceCell: UITableViewCell {
     }
     
     func configureForCell(result: CSResult) {
-        let url = NSURL(string: result.thumb)
-        downloadTask = picView.loadImageWithURl(url!)
+        
+        if let url = NSURL(string: result.thumb) {
+            downloadTask = picView.loadImageWithURl(url)
+        }
         
         titleLabel.text = result.title
         let star = round(result.star)

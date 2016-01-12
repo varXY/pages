@@ -30,19 +30,34 @@ class PView: NSObject {
     var atTheEnd = false
     
     func getScrollingForTable(VC: UIViewController) -> UIScrollView {
-        var imageNames = ["汽车维修1", "汽车维修2"]
+        let imageNames = ["汽车维修1", "汽车维修2"]
 
         if let VC_1 = VC as? ViewController_1 {
             switch VC_1.searchInfo.body[0] {
             case "1":
-                imageNames = ["汽车美容1", "汽车美容2"]
+                VC_1.searchInfo.pid = "39"
             case "2":
-                imageNames = ["汽车维修1", "汽车维修2"]
+                VC_1.searchInfo.pid = "40"
             case "3":
-                imageNames = ["增值服务1", "增值服务2"]
+                VC_1.searchInfo.pid = "41"
             default:
                 break
             }
+            
+//            var searchInfo = SearchInfo()
+//            searchInfo.typeName = "ad"
+//            searchInfo.pid = VC_1.searchInfo.pid
+//            
+//            let search = Search()
+//            search.performSearchForText(searchInfo, completion: { (success) -> Void in
+//                switch search.state {
+//                case .Results(let strings):
+//                    print(strings)
+//                default:
+//                    print("get nothing")
+//                }
+//            })
+
         }
         
         

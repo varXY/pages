@@ -19,6 +19,7 @@
 		C3466C2C1C3CB68E00979FAF /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466C2B1C3CB68E00979FAF /* TableViewController.swift */; };
 		C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C360329D1C3A05F2008852CA /* ViewController_1.swift */; };
 		C36032A21C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */; };
+		C37BDEF61C44CEFC00917F7D /* LoadServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37BDEF51C44CEFC00917F7D /* LoadServices.swift */; };
 		C3A7C75F1C350E2400E6DC4B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */; };
 		C3B15BBF1C3B657F00E12142 /* CustomPop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B15BBE1C3B657F00E12142 /* CustomPop.swift */; };
 		C3D73FD01C34AEF500C82CFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D73FCF1C34AEF500C82CFA /* AppDelegate.swift */; };
@@ -51,6 +52,7 @@
 		C360329F1C3A6890008852CA /* pages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "pages-Bridging-Header.h"; sourceTree = "<group>"; };
 		C36032A01C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
 		C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
+		C37BDEF51C44CEFC00917F7D /* LoadServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadServices.swift; sourceTree = "<group>"; };
 		C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		C3B15BBE1C3B657F00E12142 /* CustomPop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPop.swift; sourceTree = "<group>"; };
 		C3D73FCC1C34AEF500C82CFA /* pages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pages.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,6 +135,7 @@
 				C3466C251C3CA9CA00979FAF /* String+en:decode.swift */,
 				C339C22A1C40963200947247 /* UIImage+ColorImage.swift */,
 				C3466C291C3CB5BC00979FAF /* UIImageView+DownloadImage.swift */,
+				C37BDEF51C44CEFC00917F7D /* LoadServices.swift */,
 				C3F68C0B1C4356F400BB7F50 /* UIColor+CustomColor.swift */,
 				C36032A01C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.h */,
 				C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */,
@@ -270,6 +273,7 @@
 			files = (
 				C3466C221C3CA98300979FAF /* Search.swift in Sources */,
 				C3466C2C1C3CB68E00979FAF /* TableViewController.swift in Sources */,
+				C37BDEF61C44CEFC00917F7D /* LoadServices.swift in Sources */,
 				C3D73FE41C34AF9D00C82CFA /* PModel.swift in Sources */,
 				C3466C241C3CA98B00979FAF /* SearchResult.swift in Sources */,
 				C3D73FD21C34AEF500C82CFA /* ViewController.swift in Sources */,

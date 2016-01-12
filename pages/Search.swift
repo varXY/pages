@@ -18,6 +18,7 @@ struct SearchInfo {
     var body = [String]()
     var addition = ""
     var itemID = ""
+    var pid = ""
 }
 
 class Search {
@@ -60,6 +61,8 @@ class Search {
                         }
                         success = true
                     }
+                } else {
+                    print(httpResponse.statusCode)
                 }
             }
 
@@ -96,7 +99,6 @@ class Search {
             
             urlString += searchInfo.addition
             
-            
         case "item":
             urlString = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", searchInfo.itemID)
             
@@ -129,6 +131,41 @@ class Search {
 
 		var searchResults = [SearchResult]()
         var CSResults = [CSResult]()
+        
+        if type == "item" {
+            let body = dictionary["body"]  as! NSNumber as Float
+            if body == 1 {
+                let csItem = CSItem()
+                csItem.itemID = dictionary["itemid"] as! NSString as String
+                csItem.title = dictionary["title"] as! NSString as String
+                csItem.titleIntact = dictionary["titleintact"] as! NSString as String
+                csItem.subHeading = dictionary["subheading"] as! NSString as String
+                csItem.price = dictionary["price"] as! NSString as String
+                csItem.thumb = dictionary["thumb"] as! NSString as String
+                csItem.thumb1 = dictionary["thumb1"] as! NSString as String
+                csItem.thumb2 = dictionary["thumb2"] as! NSString as String
+                csItem.thumb3 = dictionary["thumb3"] as! NSString as String
+                csItem.thumb4 = dictionary["thumb4"] as! NSString as String
+                csItem.comid = dictionary["comid"] as! NSString as String
+                csItem.company = dictionary["company"] as! NSString as String
+                csItem.address = dictionary["address"] as! NSString as String
+                csItem.telephone = dictionary["telephone"] as! NSString as String
+                csItem.longitude = dictionary["longitude"] as! NSString as String
+                csItem.latitude = dictionary["latitude"] as! NSString as String
+                csItem.content = dictionary["content"] as! NSString as String
+                csItem.star = dictionary["star"] as! NSNumber as Float
+                csItem.qstar = dictionary["qstar"] as! NSNumber as Float
+                csItem.astar = dictionary["astar"] as! NSNumber as Float
+                
+                return [csItem]
+            } else {
+                let csItem = CSItem()
+                return [csItem]
+            }
+            
+
+        }
+        
 		if let array: AnyObject = dictionary["rows"] {
 
 			for resultDict in array as! [AnyObject] {
@@ -163,6 +200,12 @@ class Search {
                         csResult.company = resultDict["company"] as! NSString as String
                         csResult.star = resultDict["star"] as! NSNumber as Float
                         CSResults.append(csResult)
+                    case "ad":
+                        var imageURLs = [String]()
+                        imageURLs.append(resultDict["image_src"] as! NSString as String)
+                        imageURLs.append(resultDict["image_url"] as! NSString as String)
+                        imageURLs.append(resultDict["image_alt"] as! NSString as String)
+                        return imageURLs
                     default:
                         break
                     }
@@ -177,6 +220,7 @@ class Search {
         } else {
 			print("Expected 'results' array")
         }
+        
         
         if let array: AnyObject = dictionary["body"] {
             if let resultDict = array as? [String: AnyObject] {

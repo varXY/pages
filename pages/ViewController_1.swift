@@ -448,7 +448,24 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
         let VC_2 = ViewController_2()
         VC_2.hidesBottomBarWhenPushed = true
         VC_2.request = NSURLRequest(URL: NSURL(string: String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid))!)
-        self.navigationController?.pushViewController(VC_2, animated: true)
+        
+        searchInfo.typeName = "item"
+        searchInfo.itemID = results[indexPath.row].itemid
+        search.performSearchForText(searchInfo) { (_) -> Void in
+            switch self.search.state {
+            case .Results(let items):
+                let item = items[0] as! CSItem
+                VC_2.item = item
+            default:
+                break
+            }
+            
+            self.navigationController?.pushViewController(VC_2, animated: true)
+
+        }
+        
+        
+        
         
 //        let webVC = WebViewController()
 //        let string = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid)
