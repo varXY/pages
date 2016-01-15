@@ -102,6 +102,9 @@ class Search {
         case "item":
             urlString = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", searchInfo.itemID)
             
+        case "ad":
+            urlString = String(format: "http://www.cncar.net/api/app/ad/ad.php?pid=%@", searchInfo.pid)
+            
         default:
             break
         }
@@ -146,7 +149,7 @@ class Search {
                 csItem.thumb2 = dictionary["thumb2"] as! NSString as String
                 csItem.thumb3 = dictionary["thumb3"] as! NSString as String
                 csItem.thumb4 = dictionary["thumb4"] as! NSString as String
-                csItem.comid = dictionary["comid"] as! NSString as String
+//                csItem.comid = dictionary["comid"] as! NSString as String
                 csItem.company = dictionary["company"] as! NSString as String
                 csItem.address = dictionary["address"] as! NSString as String
                 csItem.telephone = dictionary["telephone"] as! NSString as String

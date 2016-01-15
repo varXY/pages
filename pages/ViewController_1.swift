@@ -31,9 +31,13 @@ class ViewController_1: UIViewController {
     
     var searchInfo = SearchInfo()
     
+    var contentView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()
+        
+        
         
         tableView.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - 64)
         tableView.dataSource = self
@@ -41,7 +45,7 @@ class ViewController_1: UIViewController {
         tableView.separatorColor = UIColor.clearColor()
         view.addSubview(tableView)
         
-        let contentView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 200))
+        contentView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height * 0.354))
         
         let filterView = FilterView(title: filterTitle, type: searchInfo.body[0])
         filterView.sender = { (button: UIButton) -> Void in
@@ -50,11 +54,10 @@ class ViewController_1: UIViewController {
         self.view.addSubview(filterView)
         
         let backgroundView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 40))
-        backgroundView.backgroundColor = UIColor.lightGrayColor()
+        backgroundView.backgroundColor = UIColor.whiteColor()
         contentView.addSubview(backgroundView)
         
-        let scrolling = pView.getScrollingForTable(self)
-        contentView.addSubview(scrolling)
+        pView.getScrollingForTable(self)
         
         tableView.tableHeaderView = contentView
         
@@ -65,12 +68,20 @@ class ViewController_1: UIViewController {
             tableView.addSubview(loadMoreFooterView!)
         }
         delayLoadFinish()
+        
+        let listButtonFrame = CGRectMake(20, self.view.frame.height - 134, 61, 61)
+        let listButton = pView.appointmentListButton(listButtonFrame)
+        listButton.addTarget(self, action: "openList", forControlEvents: .TouchUpInside)
+        self.view.addSubview(listButton)
     
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setToolbarHidden(true, animated: true)
+        
+        self.navigationController?.hidesBarsOnSwipe = false
+        self.navigationController?.hidesBarsOnTap = false
 //        performSearch(info: searchInfo)
     }
     
@@ -345,6 +356,16 @@ class ViewController_1: UIViewController {
         presentViewController(alert, animated: true, completion: nil)
     }
     
+    func openList() {
+        let url = NSURL(string: "http://www.cncar.net/jq/carservice-servicelist-reservelist.html".URLEncodedString()!)
+        
+        let webVC = WebViewController_1()
+        webVC.title = "预约"
+        webVC.url = url!
+        let webVC_Navi = MainNavigationController(rootViewController: webVC)
+        self.presentViewController(webVC_Navi, animated: true, completion: nil)
+    }
+    
     func performSearch(info searchInfo: SearchInfo) {
         search.performSearchForText(searchInfo) { (success) -> Void in
             
@@ -413,6 +434,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             indicator.startAnimating()
             indicator.frame = cell.bounds
             cell.contentView.addSubview(indicator)
+            tableView.userInteractionEnabled = false
             return cell
             
         case .NoResults:
@@ -421,20 +443,24 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
                 cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
                 let result = results[indexPath.row]
                 cell.configureForCell(result)
+                tableView.userInteractionEnabled = true
                 return cell
             } else {
                 let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
                 cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
                 cell.textLabel?.text = "无结果"
                 cell.textLabel?.textAlignment = .Center
+                tableView.userInteractionEnabled = true
                 return cell
             }
+            
             
             
         case .Results(_):
             let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
             let result = results[indexPath.row]
             cell.configureForCell(result)
+            tableView.userInteractionEnabled = true
             return cell
             
         }
@@ -443,8 +469,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        
+        tableView.userInteractionEnabled = false
         let VC_2 = ViewController_2()
         VC_2.hidesBottomBarWhenPushed = true
         VC_2.request = NSURLRequest(URL: NSURL(string: String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid))!)
@@ -456,7 +481,10 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             case .Results(let items):
                 let item = items[0] as! CSItem
                 VC_2.item = item
+                tableView.deselectRowAtIndexPath(indexPath, animated: false)
+                tableView.userInteractionEnabled = true
             default:
+                tableView.userInteractionEnabled = true
                 break
             }
             

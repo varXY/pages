@@ -29,46 +29,55 @@ class PView: NSObject {
     var dragging = false
     var atTheEnd = false
     
-    func getScrollingForTable(VC: UIViewController) -> UIScrollView {
-        let imageNames = ["汽车维修1", "汽车维修2"]
+    func getScrollingForTable(VC: ViewController_1) {
+        var imageNames = [String]()
 
-        if let VC_1 = VC as? ViewController_1 {
-            switch VC_1.searchInfo.body[0] {
-            case "1":
-                VC_1.searchInfo.pid = "39"
-            case "2":
-                VC_1.searchInfo.pid = "40"
-            case "3":
-                VC_1.searchInfo.pid = "41"
-            default:
-                break
-            }
-            
-//            var searchInfo = SearchInfo()
-//            searchInfo.typeName = "ad"
-//            searchInfo.pid = VC_1.searchInfo.pid
-//            
-//            let search = Search()
-//            search.performSearchForText(searchInfo, completion: { (success) -> Void in
-//                switch search.state {
-//                case .Results(let strings):
-//                    print(strings)
-//                default:
-//                    print("get nothing")
-//                }
-//            })
-
+        switch VC.searchInfo.body[0] {
+        case "1":
+            VC.searchInfo.pid = "39"
+        case "2":
+            VC.searchInfo.pid = "40"
+        case "3":
+            VC.searchInfo.pid = "41"
+        default:
+            break
         }
+            
+            var searchInfo = SearchInfo()
+            searchInfo.typeName = "ad"
+            searchInfo.pid = VC.searchInfo.pid
+            let search = Search()
+            search.performSearchForText(searchInfo, completion: { (_) -> Void in
+                
+                switch search.state {
+                case .Results(let strings):
+                    for string in strings {
+                        if string as! String != "" {
+                            imageNames.append(string as! String)
+                        }
+                    }
+                    print(imageNames)
+                    
+                    let frame = CGRect(x: 0, y: 40, width: self.screenSize.width, height: self.screenSize.height * 0.354 - 40)
+                    let scrolling = self.scrollingImagesView(frame, imagesCount: imageNames.count, imageNames: imageNames)
+                    scrolling.delegate = self
+                    VC.contentView.addSubview(scrolling)
+                    
+                    print(VC.contentView.subviews.count)
+                    
+                    let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+                    NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+                    
+                default:
+                    break
+                }
+                
+            })
+            
+        
+
         
         
-        let frame = CGRect(x: 0, y: 40, width: screenSize.width, height: 160)
-        let scrolling = scrollingImagesView(frame, imagesCount: 2, imageNames: imageNames)
-        scrolling.delegate = self
-        
-        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
-        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
-        
-        return scrolling
     }
     
     func getPageForTravel(VC: UIViewController) {
@@ -157,6 +166,14 @@ class PView: NSObject {
         }
         
         return blockView
+    }
+    
+    func appointmentListButton(frame: CGRect) -> UIButton {
+        let button = UIButton(frame: frame)
+        button.setImage(UIImage(named: "预定按钮"), forState: .Normal)
+        button.layer.cornerRadius = button.frame.width / 2
+        
+        return button
     }
     
     func blockButton(index: Int, imageName: String, size: CGSize) -> UIButton {
@@ -292,7 +309,22 @@ class PView: NSObject {
     func imageButtonForScrolling(frame: CGRect, imageName: String) -> UIButton {
         let imageButton = UIButton()
         imageButton.frame = frame
-        imageButton.setImage(UIImage(named: imageName), forState: .Normal)
+        
+        if imageName.containsString("http://") {
+            let imageView = UIImageView(frame: imageButton.bounds)
+            imageView.loadImageWithURl(NSURL(string: imageName)!)
+            imageButton.addSubview(imageView)
+//            imageButton.imageView?.loadImageWithURl(NSURL(string: imageName)!)
+//            UIImage.imageWithURL(NSURL(string: imageName)!, done: { (image) -> Void in
+//                imageButton.setImage(image, forState: .Normal)
+//                print(image)
+//            })
+
+            
+        } else {
+            imageButton.setImage(UIImage(named: imageName), forState: .Normal)
+
+        }
         
         return imageButton
     }
@@ -475,9 +507,10 @@ extension PView: UIScrollViewDelegate {
     }
     
     func movePic(timer: NSTimer) {
-        
-        if dragging == false {
-            let scrollingImages = timer.userInfo as! UIScrollView
+        let scrollingImages = timer.userInfo as! UIScrollView
+        let onePic = scrollingImages.contentSize.width == scrollingImages.frame.size.width
+                
+        if dragging == false && onePic == false {
             let atStartPoint = scrollingImages.contentOffset.x == 0
             let atEndPoint = scrollingImages.contentOffset.x == scrollingImages.contentSize.width - scrollingImages.frame.width
             if atStartPoint { atTheEnd = false }

@@ -29,6 +29,51 @@ class loadServices {
         
     }
     
+    
+    class func getTitleFromURL(url: NSURL) -> String {
+        let urlString = url.absoluteString.stringByRemovingPercentEncoding
+        var title = ""
+        
+        if let array = urlString?.componentsSeparatedByString("&") {
+            
+            for element in array {
+                
+                if let range = element.rangeOfString("title=") {
+                    title = element.stringByReplacingCharactersInRange(range, withString: "")
+                    if let range1 = title.rangeOfString("#") {
+                        title = title.stringByReplacingCharactersInRange(range1, withString: "")
+                    }
+                }
+                
+                if let range = element.rangeOfString("tail=") {
+                    title = element.stringByReplacingCharactersInRange(range, withString: "")
+                    if let range1 = title.rangeOfString("#") {
+                        title = title.stringByReplacingCharactersInRange(range1, withString: "")
+                    }
+                }
+                
+                if let range = element.rangeOfString("keyword=") {
+                    title = element.stringByReplacingCharactersInRange(range, withString: "")
+                    if let range1 = title.rangeOfString("#") {
+                        title = title.stringByReplacingCharactersInRange(range1, withString: "")
+                    }
+                }
+                
+                if let range = element.rangeOfString("name=") {
+                    title = element.stringByReplacingCharactersInRange(range, withString: "")
+                    if let range1 = title.rangeOfString("#") {
+                        title = title.stringByReplacingCharactersInRange(range1, withString: "")
+                    }
+                }
+                
+            }
+            
+        }
+        
+        return title
+    }
+    
+    
     class func changeToGaoDe(location: (Double, Double)) -> (Double, Double) {
         
         var returnLocation: (Double, Double) = (0.0, 0.0)
@@ -48,7 +93,20 @@ class loadServices {
     class func call(viewController: UIViewController, number: String) {
         let alert = UIAlertController(title: number, message: nil, preferredStyle: .Alert)
         let action1 = UIAlertAction(title: "呼叫", style: .Default) { (_) -> Void in
-            UIApplication.sharedApplication().openURL(NSURL(string: "tel://" + number)!)
+            
+            var phoneNumber = number
+            if let bracket = phoneNumber.rangeOfString("(") {
+                phoneNumber = phoneNumber.stringByReplacingCharactersInRange(bracket, withString: "")
+                if let bracket2 = phoneNumber.rangeOfString(")") {
+                    phoneNumber = phoneNumber.stringByReplacingCharactersInRange(bracket2, withString: "")
+                }
+            }
+            
+            if let bracket = phoneNumber.rangeOfString("\t") {
+                phoneNumber = phoneNumber.stringByReplacingCharactersInRange(bracket, withString: "")
+            }
+            
+            UIApplication.sharedApplication().openURL(NSURL(string: "tel://" + phoneNumber)!)
         }
         let action2 = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
         alert.addAction(action1)

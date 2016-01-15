@@ -14,6 +14,8 @@ class ViewController_2: UIViewController {
     var request = NSURLRequest()
     var webView = UIWebView()
     
+    var pageControl = UIPageControl()
+    
     var item = CSItem()
     
     override func viewDidLoad() {
@@ -21,28 +23,36 @@ class ViewController_2: UIViewController {
         self.navigationItem.title = item.title
         self.view.backgroundColor = UIColor.whiteColor()
         
-        getScrollView()
-        getToolBar()
-        getSlider()
-        getDetailView("¥" + item.price, stars: ["\(Int(item.star))", "\(Int(item.qstar))", "\(Int(item.astar))"])
-        getWebView(request)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        self.navigationController?.hidesBarsOnSwipe = false
+        self.navigationController?.hidesBarsOnTap = false
         
-        print(item.titleIntact)
-        print(item.company)
-        print(item.address)
-        print(item.content)
+        getScrollView()
+        getSlider()
+        getToolBar()
+        getDetailView("¥" + item.price, stars: ["\(Int(item.star))", "\(Int(item.qstar))", "\(Int(item.astar))"])
+        getWebView(request)
+        
 
-
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.hidesBarsOnSwipe = false
+        self.navigationController?.hidesBarsOnTap = false
     }
     
     func getScrollView() {
         let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.backgroundColor = UIColor.whiteColor()
         scrollView.delegate = self
+        scrollView.pagingEnabled = false
         scrollView.contentSize = CGSize(width: 0, height: scrollView.frame.height * 1.4 + 130)
         self.view = scrollView
     }
@@ -76,6 +86,7 @@ class ViewController_2: UIViewController {
         scrollView.contentSize = CGSizeMake(self.view.frame.width * CGFloat(imageURLs.count), 0)
         scrollView.backgroundColor = UIColor.backgroundColor()
         scrollView.pagingEnabled = true
+        scrollView.delegate = self
         scrollView.showsHorizontalScrollIndicator = false
         
         for i in 0..<imageURLs.count {
@@ -87,7 +98,18 @@ class ViewController_2: UIViewController {
             scrollView.addSubview(imageView)
         }
         
+        pageControl.frame = CGRect(x: scrollView.frame.width / 2 - scrollView.frame.width / 4, y: scrollView.frame.height - 20, width: scrollView.frame.width / 2, height: 20)
+        pageControl.numberOfPages = imageURLs.count
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = UIColor.grayColor()
+        pageControl.currentPageIndicatorTintColor = UIColor.lightGrayColor()
+        
+        if pageControl.numberOfPages == 1 || pageControl.numberOfPages == 0 {
+            pageControl.hidden = true
+        }
+        
         self.view.addSubview(scrollView)
+        self.view.addSubview(pageControl)
     }
     
     func getDetailView(price: String, stars: [String]) {
@@ -151,10 +173,16 @@ class ViewController_2: UIViewController {
 extension ViewController_2 : UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        if webView.scrollView.contentSize.height <= webView.frame.height {
-            webView.frame.size.height = webView.scrollView.contentSize.height
-            self.view.frame.size.height -= (webView.frame.size.height - webView.scrollView.contentSize.height)
+        self.webView.frame.size.height = webView.scrollView.contentSize.height
+        if let scrollView = self.view as? UIScrollView {
+            scrollView.contentSize.height += (self.webView.frame.size.height - scrollView.frame.height)
+            print(scrollView.contentSize.height)
         }
+        print(self.webView.frame.size.height)
+//        if webView.scrollView.contentSize.height <= webView.frame.height {
+//            webView.frame.size.height = webView.scrollView.contentSize.height
+//            self.view.frame.size.height -= (webView.frame.size.height - webView.scrollView.contentSize.height)
+//        }
         
 //        let webHeight = 0
         let string = "var script = document.createElement('script');"
@@ -170,17 +198,17 @@ extension ViewController_2 : UIWebViewDelegate {
         "document.getElementsByTagName('head')[0].appendChild(script);"
         webView.stringByEvaluatingJavaScriptFromString(string)
         webView.stringByEvaluatingJavaScriptFromString("ResizeImages();")
-        print(__FUNCTION__)
     }
 }
 
 extension ViewController_2 : UIScrollViewDelegate {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        
-        if scrollView == self.view {
-            webView.userInteractionEnabled = scrollView.contentOffset.y == 465 ? true : false
+        if scrollView == self.view.subviews[0] as? UIScrollView {
+            let width = scrollView.bounds.size.width
+            pageControl.currentPage = Int((scrollView.contentOffset.x + width / 2) / width)
         }
+        
     }
 }
 
@@ -188,10 +216,22 @@ extension ViewController_2 : UIScrollViewDelegate {
 extension ViewController_2 {
     
     func MakeAppointment() {
-        let string = String(format: "http://www.cncar.net/jq/carservice-servicelist-reserve.html?itemid=%@&itemname=%@&company=%@", item.itemID, item.title, item.company )
-        let webVC = WebViewController()
-        webVC.url = NSURL(string: string)!
-        self.navigationController?.pushViewController(webVC, animated: true)
+        
+        let subscribeVC = SubscribeViewController()
+        subscribeVC.title = "预约"
+        subscribeVC.info = [item.company, item.title]
+        self.navigationController?.pushViewController(subscribeVC, animated: true)
+        
+//        let string = String(format: "http://www.cncar.net/jq/carservice-servicelist-reserve.html?itemid=%@&itemname=%@&company=%@", item.itemID, item.title, item.company).URLEncodedString()
+//        let webVC = WebViewController_1()
+//        print(string)
+//
+//        if let url = NSURL(string: string!) {
+//            webVC.url = url
+//        }
+//        webVC.title = "预约"
+//        let webVC_Navi = MainNavigationController(rootViewController: webVC)
+//        self.presentViewController(webVC_Navi, animated: true, completion: nil)
     }
     
     func navi() {
@@ -208,6 +248,15 @@ extension ViewController_2 {
     }
     
     func seeComment() {
+        
+        let string = String(format: "http://www.cncar.net/jq/carservice-evaluatelist.html?busiId=786&serviceId=292").URLEncodedString()
+        let webVC = WebViewController()
+        webVC.title = "评论"
+        if let url = NSURL(string: string!) {
+            webVC.url = url
+        }
+        
+        self.navigationController?.pushViewController(webVC, animated: true)
         
     }
 }

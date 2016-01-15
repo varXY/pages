@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+typealias finished = (UIImage) -> Void
+
 extension UIImage {
     
     class func imageWithColor(color: UIColor, rect: CGRect) -> UIImage {
@@ -22,5 +24,23 @@ extension UIImage {
         UIGraphicsEndImageContext()
         
         return image
+    }
+    
+    class func imageWithURL(url: NSURL, done: finished) {
+        
+        let session = NSURLSession.sharedSession()
+        
+        session.downloadTaskWithURL(url, completionHandler: { url, response, error in
+            if error == nil && url != nil {
+                if let data = NSData(contentsOfURL: url!) {
+                    if let image = UIImage(data: data) {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            done(image)
+                        }
+                    }
+                }
+            }
+            })
+        
     }
 }
