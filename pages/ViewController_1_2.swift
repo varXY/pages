@@ -1,5 +1,5 @@
 //
-//  ViewController_2.swift
+//  ViewController_1_2.swift
 //  pages
 //
 //  Created by Bobo on 1/11/16.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ViewController_2: UIViewController {
+class ViewController_1_2: UIViewController {
     
     var request = NSURLRequest()
     var webView = UIWebView()
@@ -170,7 +170,7 @@ class ViewController_2: UIViewController {
 }
 
 
-extension ViewController_2 : UIWebViewDelegate {
+extension ViewController_1_2 : UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView) {
         self.webView.frame.size.height = webView.scrollView.contentSize.height
@@ -201,7 +201,7 @@ extension ViewController_2 : UIWebViewDelegate {
     }
 }
 
-extension ViewController_2 : UIScrollViewDelegate {
+extension ViewController_1_2 : UIScrollViewDelegate {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if scrollView == self.view.subviews[0] as? UIScrollView {
@@ -213,13 +213,13 @@ extension ViewController_2 : UIScrollViewDelegate {
 }
 
 
-extension ViewController_2 {
+extension ViewController_1_2 {
     
     func MakeAppointment() {
         
         let subscribeVC = SubscribeViewController()
         subscribeVC.title = "预约"
-        subscribeVC.info = [item.company, item.title]
+        subscribeVC.info = [item.itemID, item.company, item.title]
         self.navigationController?.pushViewController(subscribeVC, animated: true)
         
 //        let string = String(format: "http://www.cncar.net/jq/carservice-servicelist-reserve.html?itemid=%@&itemname=%@&company=%@", item.itemID, item.title, item.company).URLEncodedString()

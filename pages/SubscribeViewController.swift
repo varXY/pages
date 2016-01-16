@@ -17,6 +17,9 @@ class SubscribeViewController: UIViewController {
         super.viewDidLoad()
         
         let subscribeTableView = SubscribeTableView(frame: self.view.bounds, info: info)
+        subscribeTableView.sendBack = { () -> () in
+            self.navigationController?.popViewControllerAnimated(true)
+        }
         view.addSubview(subscribeTableView)
         
 //        let subscribeView = SubscribeView(frame: self.view.bounds, info: info!)

@@ -148,6 +148,44 @@ class PView: NSObject {
 
     }
     
+    func getPageForCSNews(VC: UIViewController) {
+        let scrollView = UIScrollView(frame: CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height - 64))
+        let height = screenSize.height * (h0 + h1 + h2 + h3) + 20
+        scrollView.contentSize = CGSizeMake(0, height)
+        VC.view.addSubview(scrollView)
+        
+        let imageNames = ["zx_ad_0", "zx_ad_1", "zx_ad_2"]
+        let frame0 = CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height * h0)
+        let scrolling = scrollingImagesView(frame0, imagesCount: 3, imageNames: imageNames)
+        scrolling.delegate = self
+        scrollView.addSubview(scrolling)
+        addTarget(VC, view: scrolling)
+        
+        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+        
+        let names = ["保养件", "维修件", "外饰件", "内饰件", "电子类", "户外类", "改装类", "内饰类"]
+        let point1 = CGPointMake(0, scrolling.frame.height)
+        let eightButton = eightButtonView(point1, titles: names, imageNames: names)
+        scrollView.addSubview(eightButton)
+        addTarget(VC, view: eightButton)
+        
+        let news0 = ["222如何辨别真假NGK火花塞", "更换汽车火花塞，不懂型号，不懂如何辨别品牌的真假，使用之后有可能导致仪表灯跟指针出现故障。"]
+        let news1 = ["111如何辨别真假NGK火花塞", "更换汽车火花塞，不懂型号，不懂如何辨别品牌的真假，使用之后有可能导致仪表灯跟指针出现故障。"]
+        let allNews = [news0, news1]
+        let imageNames1 = ["news_1", "news_1"]
+        let infoView = infomationView(point1.y + eightButton.frame.height + 10, allNews: allNews, imageNames: imageNames1)
+        scrollView.addSubview(infoView)
+        addTarget(VC, view: infoView)
+        
+        let names1 = ["product0", "product1", "product2", "product3", "product4", "product5", "product6", "product7"]
+        let point2 = CGPointMake(0, infoView.frame.origin.y + infoView.frame.height + 10)
+        let serviceView = serviceButtonView(point2, names: names1)
+        scrollView.addSubview(serviceView)
+        addTarget(VC, view: serviceView)
+        
+    }
+    
     func addTarget(VC: UIViewController, view: UIView) {
         for i in view.subviews {
             if let button = i as? UIButton {

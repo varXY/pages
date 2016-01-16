@@ -19,6 +19,9 @@ struct SearchInfo {
     var addition = ""
     var itemID = ""
     var pid = ""
+    
+    var comment = ""
+    var date = ""
 }
 
 class Search {
@@ -105,6 +108,9 @@ class Search {
         case "ad":
             urlString = String(format: "http://www.cncar.net/api/app/ad/ad.php?pid=%@", searchInfo.pid)
             
+        case "subscribe":
+            urlString = String(format: "http://www.cncar.net/api/app/server/saveapply.php?itemid=%@&username=15927284689&applycontent=%@&servertime=%@", searchInfo.itemID, searchInfo.comment, searchInfo.date).URLEncodedString()!
+            
         default:
             break
         }
@@ -165,8 +171,16 @@ class Search {
                 let csItem = CSItem()
                 return [csItem]
             }
-            
 
+        }
+        
+        if type == "subscribe" {
+            let body = dictionary["body"] as! NSString as String
+                let csItem = CSItem()
+                csItem.title = body
+                return [csItem]
+
+            
         }
         
 		if let array: AnyObject = dictionary["rows"] {

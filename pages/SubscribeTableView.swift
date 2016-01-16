@@ -9,13 +9,18 @@
 import Foundation
 import UIKit
 
+typealias SendBack = () -> ()
+
 class SubscribeTableView: UITableView {
     
     var info: [String]!
+    var itemID = ""
     
     var datePickerVisble = false
     var dueDate = NSDate()
     var imputting = false
+    var comment = ""
+    var sendBack: SendBack?
     
     private let discribe_titles = ["商户名称：", "服务名称：", "服务时间：", "服务备注："]
     
@@ -24,7 +29,10 @@ class SubscribeTableView: UITableView {
         self.dataSource = self
         self.delegate = self
         
+        
+        self.itemID = info[0]
         self.info = info
+        self.info.removeFirst()
         self.info.append("请选择")
         self.info.append("请输入")
         
@@ -46,6 +54,14 @@ class SubscribeTableView: UITableView {
     
     func showDatePicker() {
         datePickerVisble = true
+        
+        let indexPathCommentRow = NSIndexPath(forRow: 3, inSection: 0)
+        
+        if let commentRow = self.cellForRowAtIndexPath(indexPathCommentRow) {
+            if let textField = commentRow.viewWithTag(101) as? UITextField {
+                textField.resignFirstResponder()
+            }
+        }
         
         let indexPathDateRow = NSIndexPath(forRow: 2, inSection: 0)
         let indexPathDatePicker = NSIndexPath(forRow: 3, inSection: 0)
@@ -108,18 +124,109 @@ class SubscribeTableView: UITableView {
         if let dateCell = self.cellForRowAtIndexPath(indexPathDateRow) {
             dateCell.detailTextLabel!.text = self.dateToText(datePicker.date)
             dueDate = datePicker.date
+            print("\(dueDate)")
         }
     }
     
     func dateToText(date: NSDate) -> String {
         let formatter = NSDateFormatter()
-        formatter.dateStyle = .ShortStyle
-        formatter.timeStyle = .ShortStyle
+        formatter.dateStyle = .LongStyle
+        formatter.timeStyle = .LongStyle
         return formatter.stringFromDate(date)
     }
     
     func done() {
         
+        var searchInfo = SearchInfo()
+        searchInfo.typeName = "subscribe"
+        searchInfo.itemID = self.itemID
+        searchInfo.comment = self.comment
+        searchInfo.date = String(self.dueDate)
+        
+        let search = Search()
+        search.performSearchForText(searchInfo) { (_) -> Void in
+            switch search.state {
+            case .Results(let results):
+                if let item = results[0] as? CSItem {
+                    print(item.title)
+                    if item.title == "1" {
+                        
+                        dispatch_async(dispatch_get_main_queue()) {
+                            
+                            self.userInteractionEnabled = false
+                            let hudView = HudView.hudInView(self, animated: true)
+                            hudView.text = "预约成功"
+                            
+                            delay(seconds: 0.7, completion: { () -> () in
+                                hudView.removeFromSuperview()
+                                self.userInteractionEnabled = true
+                                self.sendBack!()
+                            })
+                        }
+                        
+                    } else {
+                        self.userInteractionEnabled = false
+                        let hudView = HudView.hudInView(self, animated: true)
+                        hudView.text = "预约失败"
+                        
+                        delay(seconds: 0.7, completion: { () -> () in
+                            hudView.removeFromSuperview()
+                            self.userInteractionEnabled = true
+                        })
+                    }
+                }
+            default:
+                break
+            }
+        }
+        
+//        let URLString = String(format: "http://www.cncar.net/api/app/server/saveapply.php?itemid=%@&username=15927284689&applycontent=%@&servertime=%@", self.itemID, self.comment, "\(dueDate)")
+//        self.httpGet(NSURLRequest(URL: NSURL(string: URLString.URLEncodedString()!)!)) { (data, error) -> Void in
+//
+//            if data.containsString("1") {
+//                print(data)
+//                
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    
+//                    self.userInteractionEnabled = false
+//                    let hudView = HudView.hudInView(self, animated: true)
+//                    hudView.text = "预约成功"
+//                    
+//                    delay(seconds: 0.7, completion: { () -> () in
+//                        hudView.removeFromSuperview()
+//                        self.userInteractionEnabled = true
+//                        self.sendBack!()
+//                    })
+//                    
+//                    
+//                }
+//                
+//            } else {
+//                self.userInteractionEnabled = false
+//                let hudView = HudView.hudInView(self, animated: true)
+//                hudView.text = "预约失败"
+//                
+//                delay(seconds: 0.7, completion: { () -> () in
+//                    hudView.removeFromSuperview()
+//                    self.userInteractionEnabled = true
+//                })
+//            }
+//        }
+    }
+    
+    func httpGet(request: NSURLRequest!, callback: (String, String?) -> Void) {
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request){
+            (data, response, error) -> Void in
+            if error != nil {
+                callback("", error!.localizedDescription)
+            } else {
+                let result = NSString(data: data!, encoding:
+                    NSASCIIStringEncoding)!
+                callback(result as String, nil)
+            }
+        }
+        task.resume()
     }
     
     func startInput() {
@@ -132,7 +239,9 @@ class SubscribeTableView: UITableView {
             let x = (commentRow.textLabel?.frame.width)! + (commentRow.textLabel?.frame.origin.x)!
             let textField = UITextField(frame: CGRect(x: x, y: 5, width: self.frame.width - x - 10, height: 40))
             commentRow.addSubview(textField)
+            textField.text = comment
             textField.textAlignment = .Right
+            textField.returnKeyType = .Done
             textField.tag = 101
             textField.delegate = self
             textField.becomeFirstResponder()
@@ -147,13 +256,16 @@ class SubscribeTableView: UITableView {
             
             if let commentRow = self.cellForRowAtIndexPath(indexPathCommentRow) {
                 if let textField = commentRow.viewWithTag(101) as? UITextField {
+                    textField.resignFirstResponder()
+                    textField.removeFromSuperview()
                     
-                    if textField.text == "" {
+                    if self.comment == "" {
                         commentRow.detailTextLabel?.text = "请输入"
+                    } else {
+                        commentRow.detailTextLabel?.text = self.comment
                     }
                     
-                    textField.resignFirstResponder()
-//                    textField.removeFromSuperview()
+                    
                 }
             }
         }
@@ -231,7 +343,14 @@ extension SubscribeTableView: UITableViewDataSource, UITableViewDelegate {
 extension SubscribeTableView: UITextFieldDelegate {
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        quitInput()
+        return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let oldText: NSString = textField.text!
+        let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
+        self.comment = newText as String
         return true
     }
 }

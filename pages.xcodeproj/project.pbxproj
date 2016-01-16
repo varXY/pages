@@ -21,6 +21,8 @@
 		C3466C2C1C3CB68E00979FAF /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466C2B1C3CB68E00979FAF /* TableViewController.swift */; };
 		C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C360329D1C3A05F2008852CA /* ViewController_1.swift */; };
 		C36032A21C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */; };
+		C377DB981C4A122A00F92F34 /* ViewController_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = C377DB971C4A122A00F92F34 /* ViewController_3.swift */; };
+		C377DB9A1C4A187800F92F34 /* HudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C377DB991C4A187800F92F34 /* HudView.swift */; };
 		C37BDEF61C44CEFC00917F7D /* LoadServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37BDEF51C44CEFC00917F7D /* LoadServices.swift */; };
 		C3A7C75F1C350E2400E6DC4B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */; };
 		C3B15BBF1C3B657F00E12142 /* CustomPop.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B15BBE1C3B657F00E12142 /* CustomPop.swift */; };
@@ -33,7 +35,7 @@
 		C3D73FE41C34AF9D00C82CFA /* PModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D73FE31C34AF9D00C82CFA /* PModel.swift */; };
 		C3E015771C48C1BB00DCDAFA /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E015761C48C1BB00DCDAFA /* SubscribeViewController.swift */; };
 		C3E015791C48C5AF00DCDAFA /* SubscribeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E015781C48C5AF00DCDAFA /* SubscribeTableView.swift */; };
-		C3F68C0A1C43479700BB7F50 /* ViewController_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F68C091C43479700BB7F50 /* ViewController_2.swift */; };
+		C3F68C0A1C43479700BB7F50 /* ViewController_1_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F68C091C43479700BB7F50 /* ViewController_1_2.swift */; };
 		C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F68C0B1C4356F400BB7F50 /* UIColor+CustomColor.swift */; };
 		D4400442AF9BC5E155EBD96A /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233EC591672C24A8BA5CD8B /* Pods.framework */; };
 /* End PBXBuildFile section */
@@ -58,6 +60,8 @@
 		C360329F1C3A6890008852CA /* pages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "pages-Bridging-Header.h"; sourceTree = "<group>"; };
 		C36032A01C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
 		C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
+		C377DB971C4A122A00F92F34 /* ViewController_3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_3.swift; sourceTree = "<group>"; };
+		C377DB991C4A187800F92F34 /* HudView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HudView.swift; sourceTree = "<group>"; };
 		C37BDEF51C44CEFC00917F7D /* LoadServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadServices.swift; sourceTree = "<group>"; };
 		C384D77B1C474B0400A4FB30 /* network.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = network.playground; sourceTree = "<group>"; };
 		C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -73,7 +77,7 @@
 		C3D73FE31C34AF9D00C82CFA /* PModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PModel.swift; sourceTree = "<group>"; };
 		C3E015761C48C1BB00DCDAFA /* SubscribeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribeViewController.swift; sourceTree = "<group>"; };
 		C3E015781C48C5AF00DCDAFA /* SubscribeTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribeTableView.swift; sourceTree = "<group>"; };
-		C3F68C091C43479700BB7F50 /* ViewController_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_2.swift; sourceTree = "<group>"; };
+		C3F68C091C43479700BB7F50 /* ViewController_1_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_1_2.swift; sourceTree = "<group>"; };
 		C3F68C0B1C4356F400BB7F50 /* UIColor+CustomColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+CustomColor.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,6 +132,7 @@
 				C3E015781C48C5AF00DCDAFA /* SubscribeTableView.swift */,
 				C3466C271C3CB32000979FAF /* carServiceCell.swift */,
 				C3238A2C1C3F9B3500081E6E /* LoadMoreTableFooterView.swift */,
+				C377DB991C4A187800F92F34 /* HudView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -168,7 +173,8 @@
 				C339C2281C4095C700947247 /* MainNavigationController.swift */,
 				C3D73FD11C34AEF500C82CFA /* ViewController.swift */,
 				C360329D1C3A05F2008852CA /* ViewController_1.swift */,
-				C3F68C091C43479700BB7F50 /* ViewController_2.swift */,
+				C377DB971C4A122A00F92F34 /* ViewController_3.swift */,
+				C3F68C091C43479700BB7F50 /* ViewController_1_2.swift */,
 				C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */,
 				C31385461C45E404004ED847 /* WebViewController_1.swift */,
 				C3466C2B1C3CB68E00979FAF /* TableViewController.swift */,
@@ -321,9 +327,10 @@
 				C3466C261C3CA9CA00979FAF /* String+en:decode.swift in Sources */,
 				C3E015771C48C1BB00DCDAFA /* SubscribeViewController.swift in Sources */,
 				C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */,
+				C377DB981C4A122A00F92F34 /* ViewController_3.swift in Sources */,
 				C339C2291C4095C700947247 /* MainNavigationController.swift in Sources */,
 				C339C22B1C40963200947247 /* UIImage+ColorImage.swift in Sources */,
-				C3F68C0A1C43479700BB7F50 /* ViewController_2.swift in Sources */,
+				C3F68C0A1C43479700BB7F50 /* ViewController_1_2.swift in Sources */,
 				C3D73FD01C34AEF500C82CFA /* AppDelegate.swift in Sources */,
 				C33E4C121C48852E008C5873 /* SubscribeView.swift in Sources */,
 				C3B15BBF1C3B657F00E12142 /* CustomPop.swift in Sources */,
@@ -334,6 +341,7 @@
 				C341A7FC1C3DF037003049EE /* FilterView.swift in Sources */,
 				C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */,
 				C3D73FE21C34AF8B00C82CFA /* PView.swift in Sources */,
+				C377DB9A1C4A187800F92F34 /* HudView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -470,7 +470,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.userInteractionEnabled = false
-        let VC_2 = ViewController_2()
+        let VC_2 = ViewController_1_2()
         VC_2.hidesBottomBarWhenPushed = true
         VC_2.request = NSURLRequest(URL: NSURL(string: String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid))!)
         

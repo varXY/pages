@@ -46,12 +46,14 @@ class ViewController: UIViewController {
             case 2:
                 numbers = [3, -1, "增值服务"]
             case 3:
-                let webVC = WebViewController()
-                let url = NSURL(string: "http://www.cncar.net/jq/carservice-infoindex.html")!
-                webVC.url = url
-                webVC.title = "行业资讯"
-                webVC.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(webVC, animated: true)
+                let newsVC = ViewController_3()
+                self.navigationController?.pushViewController(newsVC, animated: true)
+//                let webVC = WebViewController()
+//                let url = NSURL(string: "http://www.cncar.net/jq/carservice-infoindex.html")!
+//                webVC.url = url
+//                webVC.title = "行业资讯"
+//                webVC.hidesBottomBarWhenPushed = true
+//                navigationController?.pushViewController(webVC, animated: true)
             default:
                 break
             }
