@@ -18,10 +18,13 @@ struct SearchInfo {
     var body = [String]()
     var addition = ""
     var itemID = ""
+    
     var pid = ""
     
     var comment = ""
     var date = ""
+    
+    var userName = ""
 }
 
 class Search {
@@ -111,6 +114,8 @@ class Search {
         case "subscribe":
             urlString = String(format: "http://www.cncar.net/api/app/server/saveapply.php?itemid=%@&username=15927284689&applycontent=%@&servertime=%@", searchInfo.itemID, searchInfo.comment, searchInfo.date).URLEncodedString()!
             
+        case "applyItem":
+            urlString = String(format: "http://www.cncar.net/api/app/server/applylist.php?username=%@&identity=%@&page=%@&rows=%@", searchInfo.userName, "1", 1, 30).URLEncodedString()!
         default:
             break
         }
@@ -140,6 +145,8 @@ class Search {
 
 		var searchResults = [SearchResult]()
         var CSResults = [CSResult]()
+        var appleItems = [ApplyItem]()
+
         
         if type == "item" {
             let body = dictionary["body"]  as! NSNumber as Float
@@ -202,10 +209,8 @@ class Search {
                         // searchResult.distance = resultDict["distance"] as! NSString as String
                         searchResult.longitude = resultDict["longitude"] as! NSString as String
                         searchResult.latitude = resultDict["latitude"] as! NSString as String
-                        
-                        print(searchResult.longitude)
-                    
                         searchResults.append(searchResult)
+                        
                     case "carService":
                         let csResult = CSResult()
                         csResult.itemid = resultDict["itemid"] as! NSString as String
@@ -217,12 +222,31 @@ class Search {
                         csResult.company = resultDict["company"] as! NSString as String
                         csResult.star = resultDict["star"] as! NSNumber as Float
                         CSResults.append(csResult)
+                        
                     case "ad":
                         var imageURLs = [String]()
                         imageURLs.append(resultDict["image_src"] as! NSString as String)
                         imageURLs.append(resultDict["image_url"] as! NSString as String)
                         imageURLs.append(resultDict["image_alt"] as! NSString as String)
                         return imageURLs
+                        
+                    case "applyItem":
+                        let applyItem = ApplyItem()
+                        applyItem.itemid = resultDict["itemid"] as! NSString as String
+                        applyItem.title = resultDict["title"] as! NSString as String
+                        applyItem.price = resultDict["price"] as! NSString as String
+                        applyItem.thumb = resultDict["thumb"] as! NSString as String
+                        applyItem.company = resultDict["company"] as! NSString as String
+                        applyItem.servertime = resultDict["servertime"] as! NSString as String
+                        applyItem.note = resultDict["note"] as! NSString as String
+                        applyItem.status = resultDict["status"] as! NSString as String
+                        applyItem.status_note = resultDict["status_note"] as! NSString as String
+                        applyItem.mallid = resultDict["mallid"] as! NSString as String
+                        applyItem.comfirm_time = resultDict["comfirm_time"] as! NSString as String
+                        applyItem.comfirm_note = resultDict["comfirm_note"] as! NSString as String
+                        applyItem.evaluation = resultDict["evaluation"] as! NSString as String
+                        appleItems.append(applyItem)
+                        
                     default:
                         break
                     }
@@ -264,15 +288,18 @@ class Search {
             }
         
             
-        } else {
-            print("Expected 'results' array")
         }
         
         if type == "carService" {
             return CSResults
+        } else if type == "member" {
+            return searchResults
+        } else if type == "applyItem" {
+            return appleItems
         } else {
             return searchResults
         }
+        
     }
     
     

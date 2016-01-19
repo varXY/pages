@@ -88,7 +88,7 @@ class SubscribeTableView: UITableView {
         if let datePickerCell = self.cellForRowAtIndexPath(indexPathDatePicker) {
             datePickerCell.textLabel?.text = nil
             datePickerCell.detailTextLabel?.text = nil
-            let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: 320, height: 216))
+            let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 216))
             datePicker.tag = 100
             datePicker.date = dueDate
             datePicker.addTarget(self, action: Selector("dateChanged:"), forControlEvents: .ValueChanged)
@@ -124,7 +124,6 @@ class SubscribeTableView: UITableView {
         if let dateCell = self.cellForRowAtIndexPath(indexPathDateRow) {
             dateCell.detailTextLabel!.text = self.dateToText(datePicker.date)
             dueDate = datePicker.date
-            print("\(dueDate)")
         }
     }
     
@@ -141,7 +140,14 @@ class SubscribeTableView: UITableView {
         searchInfo.typeName = "subscribe"
         searchInfo.itemID = self.itemID
         searchInfo.comment = self.comment
-        searchInfo.date = String(self.dueDate)
+        
+        if let range = String(self.dueDate).rangeOfString(" +0000") {
+            searchInfo.date = String(self.dueDate).stringByReplacingCharactersInRange(range, withString: "")
+        } else {
+            searchInfo.date = String(self.dueDate)
+        }
+        
+        print(searchInfo.date)
         
         let search = Search()
         search.performSearchForText(searchInfo) { (_) -> Void in
@@ -242,8 +248,11 @@ class SubscribeTableView: UITableView {
             textField.text = comment
             textField.textAlignment = .Right
             textField.returnKeyType = .Done
+            textField.spellCheckingType = .No
+            textField.autocorrectionType = .No
             textField.tag = 101
             textField.delegate = self
+            textField.addTarget(self, action: "editChanged:", forControlEvents: UIControlEvents.EditingChanged)
             textField.becomeFirstResponder()
         }
     }
@@ -270,6 +279,10 @@ class SubscribeTableView: UITableView {
             }
         }
         
+    }
+    
+    func editChanged(textField: UITextField) {
+        self.comment = textField.text!
     }
 }
 
@@ -348,9 +361,9 @@ extension SubscribeTableView: UITextFieldDelegate {
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let oldText: NSString = textField.text!
-        let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
-        self.comment = newText as String
+//        let oldText: NSString = textField.text!
+//        let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
+//        self.comment = newText as String
         return true
     }
 }

@@ -33,6 +33,8 @@ class ViewController_1: UIViewController {
     
     var contentView = UIView()
     
+    var switchOn = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()
@@ -83,6 +85,7 @@ class ViewController_1: UIViewController {
         self.navigationController?.hidesBarsOnSwipe = false
         self.navigationController?.hidesBarsOnTap = false
 //        performSearch(info: searchInfo)
+        switchOn = false
     }
     
     func delayLoadFinish() {
@@ -357,13 +360,19 @@ class ViewController_1: UIViewController {
     }
     
     func openList() {
-        let url = NSURL(string: "http://www.cncar.net/jq/carservice-servicelist-reservelist.html".URLEncodedString()!)
         
-        let webVC = WebViewController_1()
-        webVC.title = "预约"
-        webVC.url = url!
-        let webVC_Navi = MainNavigationController(rootViewController: webVC)
-        self.presentViewController(webVC_Navi, animated: true, completion: nil)
+        let subscribeVC = SubscribeViewController()
+        subscribeVC.title = "预约列表"
+        subscribeVC.info = ["hello"]
+        self.navigationController?.pushViewController(subscribeVC, animated: true)
+        
+//        let url = NSURL(string: "http://www.cncar.net/jq/carservice-servicelist-reservelist.html".URLEncodedString()!)
+//        
+//        let webVC = WebViewController_1()
+//        webVC.title = "预约"
+//        webVC.url = url!
+//        let webVC_Navi = MainNavigationController(rootViewController: webVC)
+//        self.presentViewController(webVC_Navi, animated: true, completion: nil)
     }
     
     func performSearch(info searchInfo: SearchInfo) {
@@ -425,7 +434,14 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
         switch search.state {
             
         case .NotSearchedYet:
-            fatalError("Should never get here")
+//            fatalError("Should never get here")
+            
+            let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
+            cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
+            cell.textLabel?.text = "无结果"
+            cell.textLabel?.textAlignment = .Center
+            tableView.userInteractionEnabled = true
+            return cell
             
         case .Loading:
             let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
@@ -442,6 +458,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
                 let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
                 cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
                 let result = results[indexPath.row]
+                cell.delegate = self
                 cell.configureForCell(result)
                 tableView.userInteractionEnabled = true
                 return cell
@@ -460,6 +477,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
             let result = results[indexPath.row]
             cell.configureForCell(result)
+            cell.delegate = self
             tableView.userInteractionEnabled = true
             return cell
             
@@ -501,6 +519,29 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
 //        self.navigationController?.pushViewController(webVC, animated: true)
     }
 }
+
+extension ViewController_1 : CompanySelected {
+    
+    func companySelected(name: String) {
+        print(__FUNCTION__)
+        
+        for item in results {
+            if item.company == name && switchOn == false {
+                switchOn = true
+                let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, name).URLEncodedString()
+                let url = NSURL(string: urlString!)
+                    
+                let webVC = WebViewController()
+                webVC.url = url!
+                webVC.title = name
+                self.navigationController?.pushViewController(webVC, animated: true)
+            }
+        }
+        
+        
+    }
+}
+
 
 
 extension ViewController_1: UIScrollViewDelegate {

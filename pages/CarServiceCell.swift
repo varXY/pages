@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+protocol CompanySelected: class {
+    func companySelected(name: String)
+}
+
 class CarServiceCell : UITableViewCell {
     
     
@@ -20,6 +24,10 @@ class CarServiceCell : UITableViewCell {
     var priceLabel = UILabel()
     var companyLabel = UILabel()
     var locationLabel = UILabel()
+    
+    weak var delegate: CompanySelected?
+    
+    var items: [CSResult]?
     
     var downloadTask: NSURLSessionDownloadTask?
     
@@ -51,22 +59,27 @@ class CarServiceCell : UITableViewCell {
         priceLabel.textColor = UIColor.themeColor()
         priceLabel.textAlignment = .Right
         
-        companyLabel.frame = CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 110, 10)
+        companyLabel.frame = CGRectMake(0, 0, contentView.frame.width - contentView.frame.height - 100, 10)
         companyLabel.textColor = UIColor.lightGrayColor()
         companyLabel.font = UIFont.italicSystemFontOfSize(12)
         
-        locationLabel.frame = CGRectMake(titleLabel.frame.origin.x, companyLabel.frame.origin.y + companyLabel.frame.height + 10, titleLabel.frame.width, 10)
+        let companyButton = UIButton(frame: CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10))
+        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
+        companyButton.addSubview(companyLabel)
+        
+        
+        locationLabel.frame = CGRectMake(titleLabel.frame.origin.x, companyButton.frame.origin.y + companyButton.frame.height + 10, titleLabel.frame.width, 10)
         locationLabel.textColor = UIColor.lightGrayColor()
         locationLabel.font = UIFont.italicSystemFontOfSize(12)
         
-//        self.addSubview(picView)
-//        self.addSubview(titleLabel)
-//        self.addSubview(starLabel)
-//        self.addSubview(roundPic)
-//        self.addSubview(distanceLabel)
-//        self.addSubview(priceLabel)
-//        self.addSubview(companyLabel)
-//        self.addSubview(locationLabel)
+        //        self.addSubview(picView)
+        //        self.addSubview(titleLabel)
+        //        self.addSubview(starLabel)
+        //        self.addSubview(roundPic)
+        //        self.addSubview(distanceLabel)
+        //        self.addSubview(priceLabel)
+        //        self.addSubview(companyLabel)
+        //        self.addSubview(locationLabel)
         
         contentView.addSubview(picView)
         contentView.addSubview(titleLabel)
@@ -74,13 +87,14 @@ class CarServiceCell : UITableViewCell {
         contentView.addSubview(roundPic)
         contentView.addSubview(distanceLabel)
         contentView.addSubview(priceLabel)
-        contentView.addSubview(companyLabel)
+        contentView.addSubview(companyButton)
         contentView.addSubview(locationLabel)
         
         self.contentView.addSubview(contentView)
     }
     
     func configureForCell(result: CSResult) {
+        self.items?.append(result)
         
         if let url = NSURL(string: result.thumb) {
             downloadTask = picView.loadImageWithURl(url)
@@ -101,6 +115,20 @@ class CarServiceCell : UITableViewCell {
         
         locationLabel.text = result.address
     }
+    
+    func companySelected(button: UIButton) {
+        if let label = button.subviews[0] as? UILabel {
+            delegate?.companySelected(label.text!)
+            //                if item.company == label.text {
+            //                    let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, item.company).URLEncodedString()
+            //                    let url = NSURL(string: urlString!)
+            //
+            //                    delegate?.companySelected(url!)
+            //                }
+            
+        }
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

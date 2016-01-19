@@ -26,6 +26,8 @@ class PView: NSObject {
     let h1_1: CGFloat = 0.37
     let h2_1: CGFloat = 0.56
     
+    let h0_3: CGFloat = 0.28
+    
     var dragging = false
     var atTheEnd = false
     
@@ -123,6 +125,11 @@ class PView: NSObject {
         scrollView.addSubview(scrolling)
         addTarget(VC, view: scrolling)
         
+        let glassyView = UIView(frame: CGRect(x: 0, y: scrolling.frame.height - 50, width: scrolling.frame.width, height: 50))
+        glassyView.backgroundColor = UIColor.blackColor()
+        glassyView.alpha = 0.4
+        scrollView.addSubview(glassyView)
+        
         let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
         
@@ -142,20 +149,20 @@ class PView: NSObject {
         
         let names1 = ["车身贴膜", "美容养护", "音响改装", "车窗贴膜", "照明改装", "空力改装", "轮毂改装", "电子升级"]
         let point2 = CGPointMake(0, infoView.frame.origin.y + infoView.frame.height + 10)
-        let serviceView = serviceButtonView(point2, names: names1)
+        let serviceView = serviceButtonView(point2, title: "服务", names: names1)
         scrollView.addSubview(serviceView)
         addTarget(VC, view: serviceView)
 
     }
     
     func getPageForCSNews(VC: UIViewController) {
-        let scrollView = UIScrollView(frame: CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height - 64))
-        let height = screenSize.height * (h0 + h1 + h2 + h3) + 20
+        let scrollView = UIScrollView(frame: CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height - 64 - 49))
+        let height = screenSize.height * (h0_3 + h1 + h2 + h3) + 20
         scrollView.contentSize = CGSizeMake(0, height)
         VC.view.addSubview(scrollView)
         
         let imageNames = ["zx_ad_0", "zx_ad_1", "zx_ad_2"]
-        let frame0 = CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height * h0)
+        let frame0 = CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height * h0_3)
         let scrolling = scrollingImagesView(frame0, imagesCount: 3, imageNames: imageNames)
         scrolling.delegate = self
         scrollView.addSubview(scrolling)
@@ -180,7 +187,8 @@ class PView: NSObject {
         
         let names1 = ["product0", "product1", "product2", "product3", "product4", "product5", "product6", "product7"]
         let point2 = CGPointMake(0, infoView.frame.origin.y + infoView.frame.height + 10)
-        let serviceView = serviceButtonView(point2, names: names1)
+        let serviceView = serviceButtonView(point2, title: "产品", names: names1)
+        
         scrollView.addSubview(serviceView)
         addTarget(VC, view: serviceView)
         
@@ -377,7 +385,8 @@ class PView: NSObject {
         
         for i in 0..<8 {
             let scale = i < 4 ? i : i - 4
-            let height = i < 4 ? 10 : ((eightButtonView.frame.size.height - 20) / 2 + 10)
+            let distance = screenSize.height * 0.02992958
+            let height = i < 4 ? distance : ((eightButtonView.frame.size.height - 20) / 2 + distance)
             let point = CGPointMake(((screenSize.width - 20) / 4) * CGFloat(scale) + 10, height)
             let smallTap = smallTapOneInEight(point, title: titles[i], image: imageNames[i], tag: i)
             smallTap.tag = 10104 + i
@@ -396,7 +405,7 @@ class PView: NSObject {
         let oneInEightHeight = (screenSize.height * h1 - 20) / 2
         oneInEight.frame.size = CGSizeMake(oneInEightWidth, oneInEightHeight)
         
-        let imageHeight = oneInEightHeight * 0.6
+        let imageHeight = oneInEightHeight * 0.5
         let titleImageView = UIImageView(frame: CGRectMake((oneInEightWidth - imageHeight) / 2, 5, imageHeight, imageHeight))
         titleImageView.image = UIImage(named: image)
         oneInEight.addSubview(titleImageView)
@@ -484,14 +493,14 @@ class PView: NSObject {
     
     // MARK: ServicesView
     
-    func serviceButtonView(point: CGPoint, names: [String]) -> UIView {
+    func serviceButtonView(point: CGPoint, title: String, names: [String]) -> UIView {
         let view = UIView()
         view.frame.origin = point
         view.frame.size = CGSizeMake(screenSize.width, screenSize.height * h3)
         view.backgroundColor = UIColor.whiteColor()
         
         let point0 = CGPointMake(0, 0)
-        let tView = titleView(point0, title: "服务")
+        let tView = titleView(point0, title: title)
         view.addSubview(tView)
         
         for i in 0..<names.count {

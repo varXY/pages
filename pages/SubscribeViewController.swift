@@ -16,18 +16,41 @@ class SubscribeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let subscribeTableView = SubscribeTableView(frame: self.view.bounds, info: info)
-        subscribeTableView.sendBack = { () -> () in
-            self.navigationController?.popViewControllerAnimated(true)
-        }
-        view.addSubview(subscribeTableView)
+        self.title == "预约" ? showSubscribeTableView() : showSubscribeListTableView()
         
-//        let subscribeView = SubscribeView(frame: self.view.bounds, info: info!)
-//        self.view.addSubview(subscribeView)
+        if self.title != "预约" {
+            self.navigationItem.rightBarButtonItem = editButtonItem()
+        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setToolbarHidden(true, animated: true)
     }
+    
+    func showSubscribeTableView() {
+        let subscribeTableView = SubscribeTableView(frame: self.view.bounds, info: info)
+        subscribeTableView.frame.size.height -= 64
+        subscribeTableView.sendBack = { () -> () in
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+        self.view.addSubview(subscribeTableView)
+    }
+    
+    func showSubscribeListTableView() {
+        let subscribeListTableView = SubscribeListTableView(frame: self.view.bounds, info: ["hello"])
+        subscribeListTableView.frame.size.height -= 64
+        self.view.addSubview(subscribeListTableView)
+    }
 }
+
+extension SubscribeViewController: UITableViewDelegate {
+    
+}
+
+
+
+
+
+

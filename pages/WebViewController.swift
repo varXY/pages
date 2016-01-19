@@ -37,7 +37,10 @@ class WebViewController: UIViewController {
 
 extension WebViewController: UIWebViewDelegate {
     
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        return true
+    }
+    
     func webViewDidFinishLoad(webView: UIWebView) {
-        print(webView.request?.URL)
     }
 }
