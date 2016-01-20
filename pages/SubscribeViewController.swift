@@ -12,6 +12,13 @@ import UIKit
 class SubscribeViewController: UIViewController {
     
     var info: [String]!
+    var tableView: UITableView!
+    
+    var editButton: UIBarButtonItem?
+    
+    var applyItems = [ApplyItem]()
+    
+    var selectedCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +26,8 @@ class SubscribeViewController: UIViewController {
         self.title == "预约" ? showSubscribeTableView() : showSubscribeListTableView()
         
         if self.title != "预约" {
-            self.navigationItem.rightBarButtonItem = editButtonItem()
+            editButton = UIBarButtonItem(title: "Edit", style: .Plain, target: self, action: "edit:")
+            self.navigationItem.rightBarButtonItem = editButton
         }
         
     }
@@ -29,19 +37,75 @@ class SubscribeViewController: UIViewController {
         self.navigationController?.setToolbarHidden(true, animated: true)
     }
     
+    func edit(sender: UIBarButtonItem) {
+        if sender.title == "Edit" {
+            
+            changeButtonTitleBaseOnCount(self.selectedCount)
+            
+            if let listTableView = tableView as? SubscribeListTableView {
+                listTableView.beginEditing()
+            }
+            
+        } else {
+            
+            if self.selectedCount != 0 {
+                
+                if let listTableView = tableView as? SubscribeListTableView {
+                    listTableView.deleteOrCancel(true)
+                }
+                
+            } else {
+                
+                if let listTableView = tableView as? SubscribeListTableView {
+                    listTableView.deleteOrCancel(false)
+                }
+                
+            }
+            
+            self.selectedCount = 0
+            sender.title = "Edit"
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
+
+        }
+    }
+    
     func showSubscribeTableView() {
         let subscribeTableView = SubscribeTableView(frame: self.view.bounds, info: info)
         subscribeTableView.frame.size.height -= 64
         subscribeTableView.sendBack = { () -> () in
             self.navigationController?.popViewControllerAnimated(true)
         }
-        self.view.addSubview(subscribeTableView)
+        self.tableView = subscribeTableView
+        self.view.addSubview(tableView)
     }
     
     func showSubscribeListTableView() {
         let subscribeListTableView = SubscribeListTableView(frame: self.view.bounds, info: ["hello"])
+        
         subscribeListTableView.frame.size.height -= 64
-        self.view.addSubview(subscribeListTableView)
+
+        subscribeListTableView.applyItems = applyItems
+        
+        subscribeListTableView.selectedCount = { (count) -> Void in
+            self.selectedCount = count
+            self.changeButtonTitleBaseOnCount(self.selectedCount)
+        }
+        
+        self.tableView = subscribeListTableView
+        self.view.addSubview(tableView)
+        
+        
+        
+    }
+    
+    func changeButtonTitleBaseOnCount(count: Int) {
+        if count == 0 {
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
+            self.navigationItem.rightBarButtonItem?.title = "Done"
+        } else {
+            self.navigationItem.rightBarButtonItem?.title = "Delete"
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.redColor()
+        }
     }
 }
 

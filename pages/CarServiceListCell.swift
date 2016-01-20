@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+protocol ActionEvent: class {
+    func actionSended(itemID: String, buttonTitle: String)
+}
+
 class CarServiceListCell: UITableViewCell {
     
     let picView = UIImageView()
@@ -19,8 +23,13 @@ class CarServiceListCell: UITableViewCell {
     let noteLabel = UILabel()
     let statusLabel = UILabel()
     
+    var itemID = ""
+    
+    weak var delegate: ActionEvent?
+    
     private let titleFont = UIFont.boldSystemFontOfSize(18)
     private let detailFont = UIFont.systemFontOfSize(15)
+    private let statusFont = UIFont.italicSystemFontOfSize(14)
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,15 +55,18 @@ class CarServiceListCell: UITableViewCell {
         productLabel.font = detailFont
         contentView.addSubview(productLabel)
         
-        dateLabel.frame = CGRect(x: productLabel.frame.origin.x, y: productLabel.frame.origin.y + productLabel.frame.height, width: productLabel.frame.width - 100, height: 35)
+        dateLabel.frame = CGRect(x: productLabel.frame.origin.x, y: productLabel.frame.origin.y + productLabel.frame.height, width: productLabel.frame.width - 65, height: 35)
         dateLabel.text = "时间："
+        dateLabel.textColor = UIColor.lightGrayColor()
+        dateLabel.adjustsFontSizeToFitWidth = true
         dateLabel.font = detailFont
         contentView.addSubview(dateLabel)
         
         priceLabel.frame = CGRect(x: contentView.frame.width - 60 - 5, y: dateLabel.frame.origin.y, width: 60, height: 35)
         priceLabel.textColor = UIColor.orangeColor()
         priceLabel.textAlignment = .Right
-        priceLabel.text = "¥"
+        priceLabel.text = ""
+        priceLabel.adjustsFontSizeToFitWidth = true
         priceLabel.font = titleFont
         contentView.addSubview(priceLabel)
         
@@ -64,24 +76,35 @@ class CarServiceListCell: UITableViewCell {
         contentView.addSubview(noteLabel)
         
         statusLabel.frame = CGRect(x: contentView.frame.width - 100 - 5, y: noteLabel.frame.origin.y, width: 100, height: 35)
-        statusLabel.font = titleFont
+        statusLabel.font = statusFont
         statusLabel.textAlignment = .Right
+        statusLabel.adjustsFontSizeToFitWidth = true
         statusLabel.text = ""
+        statusLabel.textColor = UIColor.lightGrayColor()
         contentView.addSubview(statusLabel)
         
-        let buttonsView = buttonsOfStatus(1)
-        contentView.addSubview(buttonsView)
         
     }
     
-    func buttonsOfStatus(status: Int) -> UIView {
+    func buttonsOfStatus(status: String) -> UIView {
         let contentView = UIView(frame: CGRect(x: 0, y: 145, width: self.contentView.frame.width, height: 55))
+        var titles = [String]()
         
-        let titles = status == 0 ? ["关闭订单", "查看评论"] : ["申请取消", "订单完成", "查看评论"]
-        let buttonSize = CGSize(width: 100, height: 35)
+        switch status {
+        case "0": titles = ["关闭"]
+        case "1": titles = ["完成", "申请取消"]
+        case "2": titles = ["删除", "评价"]
+        case "3": titles = [""]
+        case "4": titles = ["删除"]
+        case "5": titles = ["删除"]
+        case "6": titles = ["删除"]
+        default: break
+        }
+        
+        let buttonSize = CGSize(width: (contentView.frame.width - 20) / 4, height: 35)
         
         for i in 0..<titles.count {
-            let x = (contentView.frame.width - 20) - (buttonSize.width * CGFloat(i)) - (10 * CGFloat(i))
+            let x = (contentView.frame.width - 10) - (buttonSize.width * CGFloat(i + 1)) - (10 * CGFloat(i))
 
             let button = UIButton(type: .System)
             button.frame = CGRect(x: x, y: 10, width: buttonSize.width, height: buttonSize.height)
@@ -89,6 +112,8 @@ class CarServiceListCell: UITableViewCell {
             button.tintColor = UIColor.themeColor()
             button.layer.cornerRadius = 8
             button.layer.borderWidth = 0.5
+            button.tag = 1000 + i
+            button.addTarget(self, action: "actionButtonTapped:", forControlEvents: .TouchUpInside)
             button.layer.borderColor = UIColor.grayColor().CGColor
             contentView.addSubview(button)
             
@@ -98,14 +123,39 @@ class CarServiceListCell: UITableViewCell {
         return contentView
     }
     
-    func configureForCell() {
-        companyLabel.text! += "汽车美容公司"
-        picView.image = UIImage(named: "product4")
-        productLabel.text! += "洗车"
-        dateLabel.text! += "\(NSDate())"
-        priceLabel.text! += "100"
-        noteLabel.text! += "ddddfweeeeeeeeeeeeeegwaadaaaaaaaaaa"
-        statusLabel.text! += "用户已关闭"
+    func actionButtonTapped(sender: UIButton) {
+        self.delegate?.actionSended(self.itemID, buttonTitle: (sender.titleLabel?.text)!)
+    }
+    
+    func configureForCell(item: ApplyItem) {
+        
+        self.itemID = item.itemid
+        
+        companyLabel.text! += item.company
+        picView.loadImageWithURl(NSURL(string: item.thumb)!)
+        productLabel.text! += item.title
+        dateLabel.text! += item.servertime
+        priceLabel.text = item.price == "0.01" ? "面议" : "¥\(item.price)"
+        
+        if item.note == "" {
+            noteLabel.text! += "无"
+        } else {
+            noteLabel.text! += item.note
+        }
+        
+        switch item.status {
+        case "0": statusLabel.text! += "等待商家确认"
+        case "1": statusLabel.text! += "商家已确认"
+        case "2": statusLabel.text! += "服务已完成"
+        case "3": statusLabel.text! += "已申请取消"
+        case "4": statusLabel.text! += "已取消"
+        case "5": statusLabel.text! += "预约者关闭"
+        case "6": statusLabel.text! += "商家关闭"
+        default: break
+        }
+        
+        let buttons = buttonsOfStatus(item.status)
+        self.contentView.addSubview(buttons)
         
     }
 

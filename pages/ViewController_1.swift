@@ -364,7 +364,24 @@ class ViewController_1: UIViewController {
         let subscribeVC = SubscribeViewController()
         subscribeVC.title = "预约列表"
         subscribeVC.info = ["hello"]
-        self.navigationController?.pushViewController(subscribeVC, animated: true)
+        
+        var itemSearchInfo = SearchInfo()
+        itemSearchInfo.typeName = "applyItem"
+        itemSearchInfo.userName = "15927284689"
+        
+        search.performSearchForText(itemSearchInfo) { (_) -> Void in
+            switch self.search.state {
+            case .Results(let items):
+                if let applyItem = items as? [ApplyItem] {
+                    subscribeVC.applyItems = applyItem
+                }
+                self.navigationController?.pushViewController(subscribeVC, animated: true)
+
+            default:
+                break
+            }
+        }
+        
         
 //        let url = NSURL(string: "http://www.cncar.net/jq/carservice-servicelist-reservelist.html".URLEncodedString()!)
 //        
@@ -457,9 +474,9 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             if self.results.count != 0 {
                 let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
                 cell.frame = CGRectMake(0, 0, self.view.frame.width, 125)
-                let result = results[indexPath.row]
-                cell.delegate = self
-                cell.configureForCell(result)
+//                let result = results[indexPath.row]
+//                cell.delegate = self
+//                cell.configureForCell(result)
                 tableView.userInteractionEnabled = true
                 return cell
             } else {
@@ -475,14 +492,21 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
             
         case .Results(_):
             let cell = CarServiceCell(style: .Default, reuseIdentifier: "cell")
-            let result = results[indexPath.row]
-            cell.configureForCell(result)
-            cell.delegate = self
+//            let result = results[indexPath.row]
+//            cell.configureForCell(result)
+//            cell.delegate = self
             tableView.userInteractionEnabled = true
             return cell
             
         }
         
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if let customCell = cell as? CarServiceCell {
+            customCell.delegate = self
+            customCell.configureForCell(results[indexPath.row])
+        }
     }
     
     

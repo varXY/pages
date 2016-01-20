@@ -45,7 +45,6 @@ class FilterView: UIView {
                 }
             }
         } else {
-            print(type + "look here!!!!!!!!!!!")
             switch type {
             case "1": self.selectedTitles = type_titles_1
             case "2": self.selectedTitles = type_titles_0

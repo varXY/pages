@@ -25,6 +25,8 @@ struct SearchInfo {
     var date = ""
     
     var userName = ""
+    var applyStatus = -1
+    var action = ""
 }
 
 class Search {
@@ -115,7 +117,13 @@ class Search {
             urlString = String(format: "http://www.cncar.net/api/app/server/saveapply.php?itemid=%@&username=15927284689&applycontent=%@&servertime=%@", searchInfo.itemID, searchInfo.comment, searchInfo.date).URLEncodedString()!
             
         case "applyItem":
-            urlString = String(format: "http://www.cncar.net/api/app/server/applylist.php?username=%@&identity=%@&page=%@&rows=%@", searchInfo.userName, "1", 1, 30).URLEncodedString()!
+            urlString = String(format: "http://www.cncar.net/api/app/server/applylist.php?username=%@&identity=%@&page=%@&rows=%@", searchInfo.userName, "1", "1", "30").URLEncodedString()!
+            if searchInfo.applyStatus != -1 {
+                urlString += "&status=\(searchInfo.applyStatus)"
+            }
+            
+        case "dealWithApply":
+            urlString = String(format: "http://www.cncar.net/api/app/server/applymanage.php?username=%@&itemid=%@&identity=%@&action=%@", searchInfo.userName, searchInfo.itemID, "1", searchInfo.action)
         default:
             break
         }
@@ -187,7 +195,13 @@ class Search {
                 csItem.title = body
                 return [csItem]
 
-            
+        }
+        
+        if type == "dealWithApply" {
+            let body = dictionary["body"] as! NSString as String
+            let csItem = CSItem()
+            csItem.title = body
+            return [csItem]
         }
         
 		if let array: AnyObject = dictionary["rows"] {
@@ -246,6 +260,8 @@ class Search {
                         applyItem.comfirm_note = resultDict["comfirm_note"] as! NSString as String
                         applyItem.evaluation = resultDict["evaluation"] as! NSString as String
                         appleItems.append(applyItem)
+                        
+                        print(applyItem.note)
                         
                     default:
                         break
