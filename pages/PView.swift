@@ -54,18 +54,17 @@ class PView: NSObject {
                 switch search.state {
                 case .Results(let strings):
                     for string in strings {
+                        print(strings)
+                        
                         if string as! String != "" {
                             imageNames.append(string as! String)
                         }
                     }
-                    print(imageNames)
                     
                     let frame = CGRect(x: 0, y: 40, width: self.screenSize.width, height: self.screenSize.height * 0.354 - 40)
                     let scrolling = self.scrollingImagesView(frame, imagesCount: imageNames.count, imageNames: imageNames)
                     scrolling.delegate = self
                     VC.contentView.addSubview(scrolling)
-                    
-                    print(VC.contentView.subviews.count)
                     
                     let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
                     NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)

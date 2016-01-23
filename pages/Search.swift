@@ -27,6 +27,11 @@ struct SearchInfo {
     var userName = ""
     var applyStatus = -1
     var action = ""
+    
+    var mallID = ""
+    var stars = [String]()
+    var isAnonymous = "0"
+    var page = "1"
 }
 
 class Search {
@@ -93,13 +98,13 @@ class Search {
         switch searchInfo.typeName {
         case "member":
             let string = "\(searchInfo.memberIndex)"
-            urlString = String(format: "http://www.cncar.net/api/app/member.php?username=13971244139&type=%@&distance=10", string)
+            urlString = String(format: "http://www.cncar.net/api/app/member.php?username=13971244139&type=%@&distance=10", string).URLEncodedString()!
             
         case "personInfo":
-            urlString = String(format: "http://dreamcar.cncar.net/appFCLoadPersonInfo.do?channelId=%@", searchInfo.body[0])
+            urlString = String(format: "http://dreamcar.cncar.net/appFCLoadPersonInfo.do?channelId=%@", searchInfo.body[0]).URLEncodedString()!
             
         case "carService":
-            urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4])
+            urlString = String(format: "http://www.cncar.net/api/app/server/serverList.php?servicetype=%@&lon=%@&lat=%@&page=%@&rows=%@", searchInfo.body[0], searchInfo.body[1], searchInfo.body[2], searchInfo.body[3], searchInfo.body[4]).URLEncodedString()!
             
             if searchInfo.CSKindID != 0 {
                 urlString += "&kindId=\(searchInfo.CSKindID)"
@@ -108,22 +113,29 @@ class Search {
             urlString += searchInfo.addition
             
         case "item":
-            urlString = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", searchInfo.itemID)
+            urlString = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", searchInfo.itemID).URLEncodedString()!
             
         case "ad":
-            urlString = String(format: "http://www.cncar.net/api/app/ad/ad.php?pid=%@", searchInfo.pid)
+            urlString = String(format: "http://www.cncar.net/api/app/ad/ad.php?pid=%@", searchInfo.pid).URLEncodedString()!
             
         case "subscribe":
             urlString = String(format: "http://www.cncar.net/api/app/server/saveapply.php?itemid=%@&username=15927284689&applycontent=%@&servertime=%@", searchInfo.itemID, searchInfo.comment, searchInfo.date).URLEncodedString()!
             
         case "applyItem":
-            urlString = String(format: "http://www.cncar.net/api/app/server/applylist.php?username=%@&identity=%@&page=%@&rows=%@", searchInfo.userName, "1", "1", "30").URLEncodedString()!
+            urlString = String(format: "http://www.cncar.net/api/app/server/applylist.php?username=%@&identity=%@&page=%@&rows=%@", searchInfo.userName, "1", searchInfo.page, "60").URLEncodedString()!
             if searchInfo.applyStatus != -1 {
                 urlString += "&status=\(searchInfo.applyStatus)"
             }
             
         case "dealWithApply":
-            urlString = String(format: "http://www.cncar.net/api/app/server/applymanage.php?username=%@&itemid=%@&identity=%@&action=%@", searchInfo.userName, searchInfo.itemID, "1", searchInfo.action)
+            urlString = String(format: "http://www.cncar.net/api/app/server/applymanage.php?username=%@&itemid=%@&identity=%@&action=%@", searchInfo.userName, searchInfo.itemID, "1", searchInfo.action).URLEncodedString()!
+            
+        case "comment":
+            urlString = String(format: "http://www.cncar.net/api/app/server/savecomment.php?itemid=%@&mallid=%@&username=%@&seller_star=%@&seller_qstar=%@&seller_astar=%@&seller_comment=%@&isanonymous=%@", searchInfo.itemID, searchInfo.mallID, searchInfo.userName, searchInfo.stars[0], searchInfo.stars[1], searchInfo.stars[2], searchInfo.comment, searchInfo.isAnonymous).URLEncodedString()!
+            
+        case "commentList":
+            urlString = String(format: "http://www.cncar.net/api/app/server/commentList.php?itemid=%@&page=%@&rows=%@", searchInfo.itemID, "1", "60").URLEncodedString()!
+            
         default:
             break
         }
@@ -153,8 +165,9 @@ class Search {
 
 		var searchResults = [SearchResult]()
         var CSResults = [CSResult]()
+        var imageURLs = [String]()
         var appleItems = [ApplyItem]()
-
+        var reviews = [Review]()
         
         if type == "item" {
             let body = dictionary["body"]  as! NSNumber as Float
@@ -204,6 +217,13 @@ class Search {
             return [csItem]
         }
         
+        if type == "comment" {
+            let body = dictionary["body"] as! NSString as String
+            let csItem = CSItem()
+            csItem.title = body
+            return [csItem]
+        }
+        
 		if let array: AnyObject = dictionary["rows"] {
 
 			for resultDict in array as! [AnyObject] {
@@ -238,11 +258,9 @@ class Search {
                         CSResults.append(csResult)
                         
                     case "ad":
-                        var imageURLs = [String]()
                         imageURLs.append(resultDict["image_src"] as! NSString as String)
-                        imageURLs.append(resultDict["image_url"] as! NSString as String)
-                        imageURLs.append(resultDict["image_alt"] as! NSString as String)
-                        return imageURLs
+//                        imageURLs.append(resultDict["image_url"] as! NSString as String)
+//                        imageURLs.append(resultDict["image_alt"] as! NSString as String)
                         
                     case "applyItem":
                         let applyItem = ApplyItem()
@@ -261,7 +279,17 @@ class Search {
                         applyItem.evaluation = resultDict["evaluation"] as! NSString as String
                         appleItems.append(applyItem)
                         
-                        print(applyItem.note)
+                    case "commentList":
+                        let review = Review()
+                        review.seller_star = resultDict["seller_star"] as! NSString as String
+                        review.seller_qstar = resultDict["seller_qstar"] as! NSString as String
+                        review.seller_astar = resultDict["seller_astar"] as! NSString as String
+                        review.seller_comment = resultDict["seller_comment"] as! NSString as String
+                        review.buyer = resultDict["buyer"] as! NSString as String
+                        review.fromid = resultDict["fromid"] as! NSString as String
+                        review.seller_ctime = resultDict["seller_ctime"] as! NSString as String
+                        review.isAnonymous = resultDict["isAnonymous"] as! NSString as String
+                        reviews.append(review)
                         
                     default:
                         break
@@ -269,8 +297,6 @@ class Search {
 					
 					
 
-				} else {
-					print("Expected a dictionary")
 				}
 			}
 
@@ -299,10 +325,7 @@ class Search {
                 searchResults.append(searchResult)
 
                 
-            } else {
-                print("Expected a dictionary")
             }
-        
             
         }
         
@@ -312,6 +335,10 @@ class Search {
             return searchResults
         } else if type == "applyItem" {
             return appleItems
+        } else if type == "commentList" {
+            return reviews
+        }  else if type == "ad" {
+            return imageURLs
         } else {
             return searchResults
         }

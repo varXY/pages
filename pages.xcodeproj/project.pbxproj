@@ -35,6 +35,9 @@
 		C3D73FDA1C34AEF600C82CFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3D73FD81C34AEF600C82CFA /* LaunchScreen.storyboard */; };
 		C3D73FE21C34AF8B00C82CFA /* PView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D73FE11C34AF8B00C82CFA /* PView.swift */; };
 		C3D73FE41C34AF9D00C82CFA /* PModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D73FE31C34AF9D00C82CFA /* PModel.swift */; };
+		C3DF86201C50633B00C51697 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF861F1C50633B00C51697 /* CommentViewController.swift */; };
+		C3DF86221C50B40A00C51697 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF86211C50B40A00C51697 /* CommentCell.swift */; };
+		C3DF86241C50BDC500C51697 /* ReviewListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF86231C50BDC500C51697 /* ReviewListTableViewController.swift */; };
 		C3E015771C48C1BB00DCDAFA /* SubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E015761C48C1BB00DCDAFA /* SubscribeViewController.swift */; };
 		C3E015791C48C5AF00DCDAFA /* SubscribeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E015781C48C5AF00DCDAFA /* SubscribeTableView.swift */; };
 		C3F68C0A1C43479700BB7F50 /* ViewController_1_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F68C091C43479700BB7F50 /* ViewController_1_2.swift */; };
@@ -79,6 +82,9 @@
 		C3D73FDB1C34AEF600C82CFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3D73FE11C34AF8B00C82CFA /* PView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PView.swift; sourceTree = "<group>"; };
 		C3D73FE31C34AF9D00C82CFA /* PModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PModel.swift; sourceTree = "<group>"; };
+		C3DF861F1C50633B00C51697 /* CommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		C3DF86211C50B40A00C51697 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
+		C3DF86231C50BDC500C51697 /* ReviewListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewListTableViewController.swift; sourceTree = "<group>"; };
 		C3E015761C48C1BB00DCDAFA /* SubscribeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribeViewController.swift; sourceTree = "<group>"; };
 		C3E015781C48C5AF00DCDAFA /* SubscribeTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribeTableView.swift; sourceTree = "<group>"; };
 		C3F68C091C43479700BB7F50 /* ViewController_1_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_1_2.swift; sourceTree = "<group>"; };
@@ -137,6 +143,7 @@
 				C3466C271C3CB32000979FAF /* CarServiceCell.swift */,
 				C393843F1C4DD677009EDC19 /* SubscribeListTableView.swift */,
 				C39384411C4DD709009EDC19 /* CarServiceListCell.swift */,
+				C3DF86211C50B40A00C51697 /* CommentCell.swift */,
 				C3238A2C1C3F9B3500081E6E /* LoadMoreTableFooterView.swift */,
 				C377DB991C4A187800F92F34 /* HudView.swift */,
 			);
@@ -185,6 +192,8 @@
 				C31385461C45E404004ED847 /* WebViewController_1.swift */,
 				C3466C2B1C3CB68E00979FAF /* TableViewController.swift */,
 				C3E015761C48C1BB00DCDAFA /* SubscribeViewController.swift */,
+				C3DF861F1C50633B00C51697 /* CommentViewController.swift */,
+				C3DF86231C50BDC500C51697 /* ReviewListTableViewController.swift */,
 				C33E4C0F1C488477008C5873 /* View */,
 				C33E4C101C48849A008C5873 /* Model */,
 				C33E4C0E1C488432008C5873 /* Extension */,
@@ -332,6 +341,7 @@
 				C3466C2A1C3CB5BC00979FAF /* UIImageView+DownloadImage.swift in Sources */,
 				C3E015791C48C5AF00DCDAFA /* SubscribeTableView.swift in Sources */,
 				C3466C261C3CA9CA00979FAF /* String+en:decode.swift in Sources */,
+				C3DF86241C50BDC500C51697 /* ReviewListTableViewController.swift in Sources */,
 				C3E015771C48C1BB00DCDAFA /* SubscribeViewController.swift in Sources */,
 				C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */,
 				C377DB981C4A122A00F92F34 /* ViewController_3.swift in Sources */,
@@ -341,12 +351,14 @@
 				C39384401C4DD677009EDC19 /* SubscribeListTableView.swift in Sources */,
 				C3D73FD01C34AEF500C82CFA /* AppDelegate.swift in Sources */,
 				C3B15BBF1C3B657F00E12142 /* CustomPop.swift in Sources */,
+				C3DF86201C50633B00C51697 /* CommentViewController.swift in Sources */,
 				C3A7C75F1C350E2400E6DC4B /* WebViewController.swift in Sources */,
 				C36032A21C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				C3466C281C3CB32000979FAF /* CarServiceCell.swift in Sources */,
 				C3238A2D1C3F9B3500081E6E /* LoadMoreTableFooterView.swift in Sources */,
 				C341A7FC1C3DF037003049EE /* FilterView.swift in Sources */,
 				C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */,
+				C3DF86221C50B40A00C51697 /* CommentCell.swift in Sources */,
 				C3D73FE21C34AF8B00C82CFA /* PView.swift in Sources */,
 				C317748B1C4F32E1006F885C /* Array+removeAtIndexes.swift in Sources */,
 				C377DB9A1C4A187800F92F34 /* HudView.swift in Sources */,

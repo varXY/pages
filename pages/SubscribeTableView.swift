@@ -18,7 +18,7 @@ class SubscribeTableView: UITableView {
     
     var datePickerVisble = false
     var dueDate = NSDate()
-    var imputting = false
+    var inputting = false
     var comment = ""
     var sendBack: SendBack?
     
@@ -136,55 +136,71 @@ class SubscribeTableView: UITableView {
     
     func done() {
         
-        var searchInfo = SearchInfo()
-        searchInfo.typeName = "subscribe"
-        searchInfo.itemID = self.itemID
-        searchInfo.comment = self.comment
-        
-        if let range = String(self.dueDate).rangeOfString(" +0000") {
-            searchInfo.date = String(self.dueDate).stringByReplacingCharactersInRange(range, withString: "")
+        if self.dueDate.timeIntervalSinceNow < 0 {
+            
+            let hudView = HudView.hudInView(self, animated: true)
+            hudView.text = "时间在过去"
+            
+            delay(seconds: 0.7, completion: { () -> () in
+                hudView.removeFromSuperview()
+                self.userInteractionEnabled = true
+            })
+            
         } else {
-            searchInfo.date = String(self.dueDate)
-        }
-        
-        print(searchInfo.date)
-        
-        let search = Search()
-        search.performSearchForText(searchInfo) { (_) -> Void in
-            switch search.state {
-            case .Results(let results):
-                if let item = results[0] as? CSItem {
-                    print(item.title)
-                    if item.title == "1" {
-                        
-                        dispatch_async(dispatch_get_main_queue()) {
+            
+            var searchInfo = SearchInfo()
+            searchInfo.typeName = "subscribe"
+            searchInfo.itemID = self.itemID
+            searchInfo.comment = self.comment
+            
+            if let range = String(self.dueDate).rangeOfString(" +0000") {
+                searchInfo.date = String(self.dueDate).stringByReplacingCharactersInRange(range, withString: "")
+            } else {
+                searchInfo.date = String(self.dueDate)
+            }
+            
+            print(searchInfo.date)
+            
+            let search = Search()
+            search.performSearchForText(searchInfo) { (_) -> Void in
+                switch search.state {
+                case .Results(let results):
+                    if let item = results[0] as? CSItem {
+                        print(item.title)
+                        if item.title == "1" {
                             
+                            dispatch_async(dispatch_get_main_queue()) {
+                                
+                                self.userInteractionEnabled = false
+                                let hudView = HudView.hudInView(self, animated: true)
+                                hudView.text = "预约成功"
+                                
+                                delay(seconds: 0.7, completion: { () -> () in
+                                    hudView.removeFromSuperview()
+                                    self.userInteractionEnabled = true
+                                    self.sendBack!()
+                                })
+                            }
+                            
+                        } else {
                             self.userInteractionEnabled = false
                             let hudView = HudView.hudInView(self, animated: true)
-                            hudView.text = "预约成功"
+                            hudView.text = "预约失败"
                             
                             delay(seconds: 0.7, completion: { () -> () in
                                 hudView.removeFromSuperview()
                                 self.userInteractionEnabled = true
-                                self.sendBack!()
                             })
                         }
-                        
-                    } else {
-                        self.userInteractionEnabled = false
-                        let hudView = HudView.hudInView(self, animated: true)
-                        hudView.text = "预约失败"
-                        
-                        delay(seconds: 0.7, completion: { () -> () in
-                            hudView.removeFromSuperview()
-                            self.userInteractionEnabled = true
-                        })
                     }
+                default:
+                    break
                 }
-            default:
-                break
             }
+            
         }
+        
+        
         
 //        let URLString = String(format: "http://www.cncar.net/api/app/server/saveapply.php?itemid=%@&username=15927284689&applycontent=%@&servertime=%@", self.itemID, self.comment, "\(dueDate)")
 //        self.httpGet(NSURLRequest(URL: NSURL(string: URLString.URLEncodedString()!)!)) { (data, error) -> Void in
@@ -236,7 +252,7 @@ class SubscribeTableView: UITableView {
     }
     
     func startInput() {
-        imputting = true
+        inputting = true
         let indexPathCommentRow = NSIndexPath(forRow: 3, inSection: 0)
         
         if let commentRow = self.cellForRowAtIndexPath(indexPathCommentRow) {
@@ -258,8 +274,8 @@ class SubscribeTableView: UITableView {
     }
     
     func quitInput() {
-        if imputting == true {
-            imputting = false
+        if inputting == true {
+            inputting = false
             
             let indexPathCommentRow = NSIndexPath(forRow: 3, inSection: 0)
             
@@ -342,10 +358,10 @@ extension SubscribeTableView: UITableViewDataSource, UITableViewDelegate {
         if indexPath.row == 2 {
             datePickerVisble ? hideDatePicker() : showDatePicker()
         } else if indexPath.row == 3 && !datePickerVisble {
-            imputting ? quitInput() : startInput()
+            inputting ? quitInput() : startInput()
         } else if indexPath.row == 4 && datePickerVisble {
             hideDatePicker()
-            imputting ? quitInput() : startInput()
+            inputting ? quitInput() : startInput()
         } else {
             
         }

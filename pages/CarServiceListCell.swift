@@ -27,7 +27,7 @@ class CarServiceListCell: UITableViewCell {
     
     weak var delegate: ActionEvent?
     
-    private let titleFont = UIFont.boldSystemFontOfSize(18)
+    private let titleFont = UIFont.boldSystemFontOfSize(17)
     private let detailFont = UIFont.systemFontOfSize(15)
     private let statusFont = UIFont.italicSystemFontOfSize(14)
 
@@ -48,6 +48,7 @@ class CarServiceListCell: UITableViewCell {
         let imageViewSize = CGSize(width: (contentView.frame.width - 10) / 3, height: 105)
         picView.frame = CGRect(x: 5, y: companyLabel.frame.origin.y + companyLabel.frame.height, width: imageViewSize.width, height: imageViewSize.height)
         picView.backgroundColor = UIColor.backgroundColor()
+        picView.contentMode = .ScaleAspectFill
         contentView.addSubview(picView)
         
         productLabel.frame = CGRect(x: 5 + imageViewSize.width + 5, y: picView.frame.origin.y, width: imageViewSize.width * 2 - 5 , height: 35)
@@ -119,6 +120,11 @@ class CarServiceListCell: UITableViewCell {
             
         }
         
+        if let button = contentView.subviews[0] as? UIButton {
+            if button.titleLabel?.text == "" {
+                button.hidden = true
+            }
+        }
         
         return contentView
     }

@@ -39,7 +39,8 @@ class ViewController_1: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()
         
-        
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        self.navigationItem.leftBarButtonItem = quitButton
         
         tableView.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - 64)
         tableView.dataSource = self
@@ -86,6 +87,11 @@ class ViewController_1: UIViewController {
         self.navigationController?.hidesBarsOnTap = false
 //        performSearch(info: searchInfo)
         switchOn = false
+        searchInfo.typeName = "carService"
+    }
+    
+    func quit() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func delayLoadFinish() {
@@ -361,6 +367,13 @@ class ViewController_1: UIViewController {
     
     func openList() {
         
+//        let VC = CommentViewController()
+//        VC.itemid = "323"
+//        VC.mallid = "2"
+//        VC.username = "15927284689"
+//        let navi = MainNavigationController(rootViewController: VC)
+//        self.presentViewController(navi, animated: true, completion: nil)
+        
         let subscribeVC = SubscribeViewController()
         subscribeVC.title = "预约列表"
         subscribeVC.info = ["hello"]
@@ -376,9 +389,23 @@ class ViewController_1: UIViewController {
                     subscribeVC.applyItems = applyItem
                 }
                 self.navigationController?.pushViewController(subscribeVC, animated: true)
-
+            case .NoResults:
+                let hudView = HudView.hudInView(self.view, animated: true)
+                hudView.text = "没有预约"
+                
+                delay(seconds: 0.7, completion: { () -> () in
+                    hudView.removeFromSuperview()
+                    self.view.userInteractionEnabled = true
+                })
+                
             default:
-                break
+                let hudView = HudView.hudInView(self.view, animated: true)
+                hudView.text = "网络出错"
+                
+                delay(seconds: 0.7, completion: { () -> () in
+                    hudView.removeFromSuperview()
+                    self.view.userInteractionEnabled = true
+                })
             }
         }
         
@@ -396,7 +423,14 @@ class ViewController_1: UIViewController {
         search.performSearchForText(searchInfo) { (success) -> Void in
             
             if !success {
-                print("something wrong with net work")
+                let hudView = HudView.hudInView(self.view, animated: true)
+                hudView.text = "网络故障"
+                
+                delay(seconds: 0.7, completion: { () -> () in
+                    hudView.removeFromSuperview()
+                    self.view.userInteractionEnabled = true
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
             }
             
             switch self.search.state {
@@ -547,20 +581,20 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
 extension ViewController_1 : CompanySelected {
     
     func companySelected(name: String) {
-        print(__FUNCTION__)
-        
-        for item in results {
-            if item.company == name && switchOn == false {
-                switchOn = true
-                let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, name).URLEncodedString()
-                let url = NSURL(string: urlString!)
-                    
-                let webVC = WebViewController()
-                webVC.url = url!
-                webVC.title = name
-                self.navigationController?.pushViewController(webVC, animated: true)
-            }
-        }
+//        print(__FUNCTION__)
+//        
+//        for item in results {
+//            if item.company == name && switchOn == false {
+//                switchOn = true
+//                let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, name).URLEncodedString()
+//                let url = NSURL(string: urlString!)
+//                    
+//                let webVC = WebViewController()
+//                webVC.url = url!
+//                webVC.title = name
+//                self.navigationController?.pushViewController(webVC, animated: true)
+//            }
+//        }
         
         
     }

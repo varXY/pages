@@ -10,11 +10,21 @@ import Foundation
 import UIKit
 
 typealias SelectedCount = (Int) -> Void
+typealias PresentViewController = (UINavigationController) -> Void
+typealias ShowAlert = (UIAlertController) -> Void
 
 class SubscribeListTableView: UITableView {
     
     var applyItems = [ApplyItem]()
+    
     var selectedCount: SelectedCount?
+    var presentViewController: PresentViewController?
+    var showAlert: ShowAlert?
+    
+    var loadMoreFooterView: LoadMoreTableFooterView?
+    var loadingMore: Bool = false
+    var loadingMoreShowing: Bool = false
+    var page = 1
     
     var headerView: UIView?
     var selectedButtonIndex = -1
@@ -30,6 +40,56 @@ class SubscribeListTableView: UITableView {
         self.separatorColor = UIColor.clearColor()
         
         self.headerView = viewForHeader()
+        
+        if loadMoreFooterView == nil {
+            loadMoreFooterView = LoadMoreTableFooterView(frame: CGRectMake(0, self.contentSize.height, self.frame.size.width, self.frame.size.height))
+            loadMoreFooterView!.delegate = self
+            loadMoreFooterView!.backgroundColor = UIColor.clearColor()
+            self.addSubview(loadMoreFooterView!)
+        }
+        delayLoadFinish()
+    }
+    
+    func delayLoadFinish() {
+        if (loadingMore) {
+            doneLoadingMoreTableViewData()
+        }
+        
+        loadingMoreShowing = true
+        //        let itemsCount = 30
+        //        if (itemsCount != 30) {
+        //            loadingMoreShowing = false
+        //        } else {
+        //            loadingMoreShowing = true
+        //        }
+        if (!loadingMoreShowing) {
+            self.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        }
+        self.reloadData()
+//        performSearch(info: searchInfo)
+        //        tableView.reloadData()
+    }
+    
+    func makeDatas() {
+        page++
+        
+        var itemSearchInfo = SearchInfo()
+        itemSearchInfo.typeName = "applyItem"
+        itemSearchInfo.userName = "15927284689"
+        itemSearchInfo.page = "\(page)"
+        
+        let search = Search()
+        search.performSearchForText(itemSearchInfo) { (_) -> Void in
+            switch search.state {
+            case .Results(let items):
+                if let applyItems = items as? [ApplyItem] {
+                    self.applyItems += applyItems
+                    self.reloadData()
+                }
+            default:
+                break
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -189,6 +249,23 @@ class SubscribeListTableView: UITableView {
             }
         }
     }
+    
+    func writeComment(itemID: String) {
+        let VC = CommentViewController()
+        VC.itemid = itemID
+        
+        for item in applyItems {
+            if item.itemid == itemID {
+                VC.mallid = item.mallid
+            }
+        }
+        
+        VC.username = "15927284689"
+        let navi = MainNavigationController(rootViewController: VC)
+        
+        self.presentViewController!(navi)
+
+    }
 }
 
 extension SubscribeListTableView: UITableViewDataSource, UITableViewDelegate {
@@ -259,13 +336,36 @@ extension SubscribeListTableView: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        dealWithItem(applyItems[indexPath.row].itemid, action: "delete")
-        
-        applyItems.removeAtIndex(indexPath.row)
-        
-        self.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+//    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+//        
+//        dealWithItem(applyItems[indexPath.row].itemid, action: "delete")
+//        
+//        applyItems.removeAtIndex(indexPath.row)
+//        
+//        self.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+//    }
+}
+
+
+extension SubscribeListTableView: LoadMoreTableFooterViewDelegate {
+    
+    func loadMoreTableFooterDidTriggerRefresh(view: LoadMoreTableFooterView) {
+        loadMoreTableViewDataSource()
+    }
+    
+    func loadMoreTableFooterDataSourceIsLoading(view: LoadMoreTableFooterView) -> Bool {
+        return loadingMore
+    }
+    
+    // ViewController function
+    func loadMoreTableViewDataSource() {
+        loadingMore = true
+        makeDatas()
+    }
+    
+    func doneLoadingMoreTableViewData() {
+        loadingMore = false
+        loadMoreFooterView!.loadMoreScrollViewDataSourceDidFinishedLoading(self)
     }
 }
 
@@ -285,9 +385,26 @@ extension SubscribeListTableView: ActionEvent {
         case "同意取消":
             dealWithItem(itemID, action: "apply")
         case "删除":
-            dealWithItem(itemID, action: "delete")
+            let alert = UIAlertController(title: "确定删除吗？", message: nil, preferredStyle: .Alert)
+            let action_0 = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            let action_1 = UIAlertAction(title: "确定", style: .Default, handler: { (_) -> Void in
+                self.dealWithItem(itemID, action: "delete")
+            })
+            
+            alert.addAction(action_0)
+            alert.addAction(action_1)
+            
+            self.showAlert!(alert)
+            
+        case "评价":
+            writeComment(itemID)
         default:
             break
         }
     }
 }
+
+
+
+
+

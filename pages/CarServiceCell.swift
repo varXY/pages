@@ -64,7 +64,7 @@ class CarServiceCell : UITableViewCell {
         companyLabel.font = UIFont.italicSystemFontOfSize(12)
         
         let companyButton = UIButton(frame: CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10))
-        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
+//        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
         companyButton.addSubview(companyLabel)
         
         

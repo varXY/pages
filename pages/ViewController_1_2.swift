@@ -23,6 +23,9 @@ class ViewController_1_2: UIViewController {
         self.navigationItem.title = item.title
         self.view.backgroundColor = UIColor.whiteColor()
         
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        self.navigationItem.leftBarButtonItem = quitButton
+        
         
     }
     
@@ -48,12 +51,18 @@ class ViewController_1_2: UIViewController {
         self.navigationController?.hidesBarsOnTap = false
     }
     
+    func quit() {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     func getScrollView() {
         let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.backgroundColor = UIColor.whiteColor()
         scrollView.delegate = self
         scrollView.pagingEnabled = false
-        scrollView.contentSize = CGSize(width: 0, height: scrollView.frame.height * 1.4 + 130)
+//        scrollView.contentSize = CGSize(width: 0, height: scrollView.frame.height * 1.4 + 130)
+        
+        scrollView.contentSize = self.view.bounds.size
         self.view = scrollView
     }
     
@@ -117,7 +126,7 @@ class ViewController_1_2: UIViewController {
         self.view.addSubview(contentView)
         
         let priceLabel = UILabel(frame: CGRectMake(10, 10, (contentView.frame.width - 20) / 2, (contentView.frame.height-20) / 2))
-        priceLabel.text = price
+        priceLabel.text = price == "¥0.01" ? "面议" : price
         priceLabel.textAlignment = .Center
         priceLabel.textColor = UIColor.themeColor()
         priceLabel.font = UIFont.boldSystemFontOfSize(20)
@@ -149,15 +158,15 @@ class ViewController_1_2: UIViewController {
             starTitleLabels[i].textAlignment = .Center
             contentView.addSubview(starTitleLabels[i])
         }
-        
-        
 
     }
     
     func getWebView(request: NSURLRequest) {
-        webView = UIWebView(frame: CGRectMake(0, 130 + self.view.frame.height * 0.4, self.view.frame.width, self.view.frame.height))
+        let y = 130 + self.view.frame.height * 0.4
+        webView = UIWebView(frame: CGRectMake(0, y, self.view.frame.width, self.view.frame.height - y))
         webView.delegate = self
         webView.userInteractionEnabled = false
+        webView.alpha = 0.0
 //        webView.loadRequest(request)
 //        webView.scalesPageToFit = true
         let url = NSURL(string: "http://www.cncar.net/jq/carservice-index.html")
@@ -173,9 +182,11 @@ class ViewController_1_2: UIViewController {
 extension ViewController_1_2 : UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView) {
+        webView.alpha = 1.0
         self.webView.frame.size.height = webView.scrollView.contentSize.height
         if let scrollView = self.view as? UIScrollView {
-            scrollView.contentSize.height += (self.webView.frame.size.height - scrollView.frame.height)
+            let cioncideHeight = self.view.frame.height - (130 + self.view.frame.height * 0.4)
+            scrollView.contentSize.height += (self.webView.frame.size.height - cioncideHeight - 40)
             print(scrollView.contentSize.height)
         }
         print(self.webView.frame.size.height)
@@ -249,14 +260,66 @@ extension ViewController_1_2 {
     
     func seeComment() {
         
-        let string = String(format: "http://www.cncar.net/jq/carservice-evaluatelist.html?busiId=786&serviceId=292").URLEncodedString()
-        let webVC = WebViewController()
-        webVC.title = "评论"
-        if let url = NSURL(string: string!) {
-            webVC.url = url
+        var searchInfo = SearchInfo()
+        searchInfo.typeName = "commentList"
+        searchInfo.itemID = item.itemID
+        
+        let search = Search()
+        search.performSearchForText(searchInfo) { (_) -> Void in
+            print(search.state)
+            
+            switch search.state {
+            case .Results(let results):
+                if let reviews = results as? [Review] {
+                    let reviewVC = ReviewListTableViewController()
+                    reviewVC.reviews = reviews
+                    self.navigationController?.pushViewController(reviewVC, animated: true)
+                }
+                
+            case .NoResults:
+                
+                let hudView = HudView.hudInView(self.view, animated: true)
+                hudView.text = "没有评论"
+                
+                delay(seconds: 0.7, completion: { () -> () in
+                    hudView.removeFromSuperview()
+                    self.view.userInteractionEnabled = true
+                    
+//                    let review = Review()
+//                    review.seller_star = "3"
+//                    review.seller_qstar = "4"
+//                    review.seller_astar = "2"
+//                    review.seller_comment = "这是一个评论"
+//                    review.fromid = "2"
+//                    review.seller_ctime = "2016-01-20 14:01:53"
+//                    review.isAnonymous = "0"
+//                    
+//                    let reviewVC = ReviewListTableViewController()
+//                    reviewVC.reviews = [review]
+//                    self.navigationController?.pushViewController(reviewVC, animated: true)
+                })
+     
+                
+            default:
+                let hudView = HudView.hudInView(self.view, animated: true)
+                hudView.text = "连接失败"
+                
+                delay(seconds: 0.7, completion: { () -> () in
+                    hudView.removeFromSuperview()
+                    self.view.userInteractionEnabled = true
+                })
+            }
         }
         
-        self.navigationController?.pushViewController(webVC, animated: true)
+        
+//        let string = String(format: "http://www.cncar.net/jq/carservice-evaluatelist.html?busiId=786&serviceId=292").URLEncodedString()
+//        let webVC = WebViewController()
+//        webVC.title = "评论"
+//        if let url = NSURL(string: string!) {
+//            webVC.url = url
+//        }
+//        
+//        self.navigationController?.pushViewController(webVC, animated: true)
         
     }
 }

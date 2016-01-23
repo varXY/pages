@@ -25,9 +25,12 @@ class SubscribeViewController: UIViewController {
         
         self.title == "预约" ? showSubscribeTableView() : showSubscribeListTableView()
         
+        let backButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "back")
+        self.navigationItem.leftBarButtonItem = backButton
+        
         if self.title != "预约" {
-            editButton = UIBarButtonItem(title: "Edit", style: .Plain, target: self, action: "edit:")
-            self.navigationItem.rightBarButtonItem = editButton
+//            editButton = UIBarButtonItem(title: "Edit", style: .Plain, target: self, action: "edit:")
+//            self.navigationItem.rightBarButtonItem = editButton
         }
         
     }
@@ -35,6 +38,10 @@ class SubscribeViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setToolbarHidden(true, animated: true)
+    }
+    
+    func back() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func edit(sender: UIBarButtonItem) {
@@ -89,6 +96,14 @@ class SubscribeViewController: UIViewController {
         subscribeListTableView.selectedCount = { (count) -> Void in
             self.selectedCount = count
             self.changeButtonTitleBaseOnCount(self.selectedCount)
+        }
+        
+        subscribeListTableView.presentViewController = { (navi) -> Void in
+            self.presentViewController(navi, animated: true, completion: nil)
+        }
+        
+        subscribeListTableView.showAlert = { (alert) -> Void in
+            self.presentViewController(alert, animated: true, completion: nil)
         }
         
         self.tableView = subscribeListTableView

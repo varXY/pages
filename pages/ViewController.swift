@@ -17,7 +17,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.lightGrayColor()
+        view.backgroundColor = UIColor.backgroundColor()
         
         segmentControl = UISegmentedControl(items: pModel.titles)
         for i in 0..<4 { segmentControl.setWidth(75, forSegmentAtIndex: i) }
@@ -70,6 +70,7 @@ class ViewController: UIViewController {
         var searchInfo = SearchInfo()
         searchInfo.typeName = "carService"
         searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
+        searchInfo.userName = "15927284689"
 //        searchInfo.CSKindID = numbers[1] as! Int
         searchInfo.CSKindID = 0
         
@@ -158,6 +159,7 @@ class ViewController: UIViewController {
             var searchInfo = SearchInfo()
             
             searchInfo.typeName = "carService"
+            searchInfo.userName = "15927284689"
             searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
             searchInfo.CSKindID = numbers[1] as! Int
             
