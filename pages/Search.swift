@@ -11,6 +11,8 @@ import UIKit
 
 typealias SearchComplete = (Bool) -> Void
 
+typealias SearchDone = (Search) -> Void
+
 struct SearchInfo {
     var typeName = ""
     var memberIndex = 1
@@ -32,6 +34,8 @@ struct SearchInfo {
     var stars = [String]()
     var isAnonymous = "0"
     var page = "1"
+    
+    var productKindID = "0"
 }
 
 class Search {
@@ -45,6 +49,49 @@ class Search {
 
 	private(set) var state: State = .NotSearchedYet
 	private var dataTask: NSURLSessionDataTask? = nil
+    
+    
+    class func performSearchForText(searchInfo: SearchInfo, completion: SearchDone) {
+        let search = Search()
+        
+        search.dataTask?.cancel()
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        search.state = .Loading
+        
+        let url = search.urlWithSearchText(searchInfo)
+        print(url)
+        let session = NSURLSession.sharedSession()
+        search.dataTask = session.dataTaskWithURL(url, completionHandler: { (data, response, error) -> Void in
+            
+            search.state = .NotSearchedYet
+            
+            if let error = error {
+                if error.code == -999 { return }
+            } else if let httpResponse = response as? NSHTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    if let dictionary = search.parseJOSN(data!) {
+                        let searchResults = search.parseDictionary(searchInfo.typeName, dictionary: dictionary)
+                        if searchResults.isEmpty {
+                            search.state = .NoResults
+                        } else {
+                            search.state = .Results(searchResults)
+                        }
+                    }
+                } else {
+                    print(httpResponse.statusCode)
+                }
+            }
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                completion(search)
+            }
+        })
+        
+        search.dataTask?.resume()
+        
+    }
 
 
     func performSearchForText(searchInfo: SearchInfo, completion: SearchComplete) {
@@ -136,6 +183,11 @@ class Search {
         case "commentList":
             urlString = String(format: "http://www.cncar.net/api/app/server/commentList.php?itemid=%@&page=%@&rows=%@", searchInfo.itemID, "1", "60").URLEncodedString()!
             
+        case "products":
+            urlString = String(format: "http://www.cncar.net/api/app/product/productList.php?kindid=%@&page=%@&rows=%@", searchInfo.productKindID, "1", "60").URLEncodedString()!
+            
+            urlString += searchInfo.addition.URLEncodedString()!
+            
         default:
             break
         }
@@ -145,7 +197,6 @@ class Search {
 	}
 
 	private func parseJOSN(data: NSData) -> [String: AnyObject]?  {
-		// var error: NSError?
 
 		do {
 			let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0)) as? [String: AnyObject]
@@ -168,6 +219,7 @@ class Search {
         var imageURLs = [String]()
         var appleItems = [ApplyItem]()
         var reviews = [Review]()
+        var products = [Product]()
         
         if type == "item" {
             let body = dictionary["body"]  as! NSNumber as Float
@@ -291,6 +343,21 @@ class Search {
                         review.isAnonymous = resultDict["isAnonymous"] as! NSString as String
                         reviews.append(review)
                         
+                    case "products":
+                        let product = Product()
+                        product.itemid = resultDict["itemid"] as! NSString as String
+                        product.title = resultDict["title"] as! NSString as String
+                        product.subheading = resultDict["subheading"] as! NSString as String
+                        product.brand = resultDict["brand"] as! NSString as String
+                        product.price = resultDict["price"] as! NSString as String
+                        product.thumb = resultDict["thumb"] as! NSString as String
+                        product.userid = resultDict["userid"] as! NSString as String
+                        product.company = resultDict["company"] as! NSString as String
+                        product.areaname = resultDict["areaname"] as! NSString as String
+                        product.address = resultDict["address"] as! NSString as String
+                        product.star = resultDict["star"] as! NSNumber as Float
+                        products.append(product)
+                        
                     default:
                         break
                     }
@@ -337,8 +404,10 @@ class Search {
             return appleItems
         } else if type == "commentList" {
             return reviews
-        }  else if type == "ad" {
+        } else if type == "ad" {
             return imageURLs
+        } else if type == "products" {
+            return products
         } else {
             return searchResults
         }

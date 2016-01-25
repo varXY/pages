@@ -47,6 +47,7 @@
         <scene sceneID="vbT-Ql-vCB">
             <objects>
                 <tabBarController id="xxm-69-jIp" sceneMemberID="viewController">
+                    <nil key="simulatedStatusBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="Y0j-kL-qoV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

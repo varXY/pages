@@ -31,6 +31,18 @@ class PView: NSObject {
     var dragging = false
     var atTheEnd = false
     
+    func getSliderForProductTable(VC: ViewController_3_1) {
+        let imageNames = ["adbar1", "adbar2"]
+        
+        let frame = CGRect(x: 0, y: 40, width: self.screenSize.width, height: self.screenSize.height * 0.354 - 40)
+        let scrolling = self.scrollingImagesView(frame, imagesCount: imageNames.count, imageNames: imageNames)
+        scrolling.delegate = self
+        VC.contentView.addSubview(scrolling)
+        
+        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+    }
+    
     func getScrollingForTable(VC: ViewController_1) {
         var imageNames = [String]()
 
@@ -155,7 +167,7 @@ class PView: NSObject {
     }
     
     func getPageForCSNews(VC: UIViewController) {
-        let scrollView = UIScrollView(frame: CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height - 64 - 49))
+        let scrollView = UIScrollView(frame: CGRectMake(0, 0, VC.view.frame.width, VC.view.frame.height - 64))
         let height = screenSize.height * (h0_3 + h1 + h2 + h3) + 20
         scrollView.contentSize = CGSizeMake(0, height)
         VC.view.addSubview(scrollView)

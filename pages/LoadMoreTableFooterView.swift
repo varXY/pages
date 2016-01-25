@@ -37,7 +37,7 @@ class LoadMoreTableFooterView: UIView {
         let label: UILabel = UILabel(frame: CGRectMake(0, 10, self.frame.size.width, 20))
         label.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         label.font = UIFont.boldSystemFontOfSize(13)
-        label.textColor = TEXT_COLOR
+        label.textColor = UIColor.themeColor()
         label.shadowColor = UIColor(white: 0.9, alpha: 1)
         label.shadowOffset = CGSizeMake(0, 1)
         label.backgroundColor = UIColor.clearColor()

@@ -126,7 +126,7 @@ class ViewController_1_2: UIViewController {
         self.view.addSubview(contentView)
         
         let priceLabel = UILabel(frame: CGRectMake(10, 10, (contentView.frame.width - 20) / 2, (contentView.frame.height-20) / 2))
-        priceLabel.text = price == "¥0.01" ? "面议" : price
+        priceLabel.text = price == "¥0.01" || price == "¥0.00" ? "面议" : price
         priceLabel.textAlignment = .Center
         priceLabel.textColor = UIColor.themeColor()
         priceLabel.font = UIFont.boldSystemFontOfSize(20)
@@ -165,14 +165,19 @@ class ViewController_1_2: UIViewController {
         let y = 130 + self.view.frame.height * 0.4
         webView = UIWebView(frame: CGRectMake(0, y, self.view.frame.width, self.view.frame.height - y))
         webView.delegate = self
+        //        self.view.userInteractionEnabled = false
         webView.userInteractionEnabled = false
         webView.alpha = 0.0
-//        webView.loadRequest(request)
-//        webView.scalesPageToFit = true
-        let url = NSURL(string: "http://www.cncar.net/jq/carservice-index.html")
-        webView.loadHTMLString(item.content, baseURL: url)
+        //        let url = NSURL(string: "http://www.cncar.net/jq/carservice-index.html")
+        webView.loadHTMLString(item.content, baseURL: nil)
         webView.scrollView.contentMode = .ScaleAspectFit
         self.view.addSubview(webView)
+        
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        indicator.startAnimating()
+        indicator.frame = CGRectMake(0, y, self.view.frame.width, webView.frame.height - 100)
+        indicator.tag = 98765
+        self.view.addSubview(indicator)
     }
     
     
@@ -182,42 +187,33 @@ class ViewController_1_2: UIViewController {
 extension ViewController_1_2 : UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView) {
+        if let indicator = self.view.viewWithTag(98765) as? UIActivityIndicatorView {
+            indicator.removeFromSuperview()
+        }
+        
         webView.alpha = 1.0
         self.webView.frame.size.height = webView.scrollView.contentSize.height
         if let scrollView = self.view as? UIScrollView {
-            let cioncideHeight = self.view.frame.height - (130 + self.view.frame.height * 0.4)
+            let cioncideHeight = self.view.frame.height * 0.6 - 130
             scrollView.contentSize.height += (self.webView.frame.size.height - cioncideHeight - 40)
-            print(scrollView.contentSize.height)
         }
-        print(self.webView.frame.size.height)
-//        if webView.scrollView.contentSize.height <= webView.frame.height {
-//            webView.frame.size.height = webView.scrollView.contentSize.height
-//            self.view.frame.size.height -= (webView.frame.size.height - webView.scrollView.contentSize.height)
-//        }
-        
-//        let webHeight = 0
-        let string = "var script = document.createElement('script');"
-        "script.type = 'text/javascript';"
-        "script.text = \"function ResizeImages() { "
-        "var myimg,oldwidth, newheight;"
-        "var maxwidth=320;" //缩放系数
-        "for(i=0;i <document.images.length;i++){"
-        "myimg = document.images;"
-        "myimg.setAttribute('style','max-width:320px;height:auto')"
-        "}"
-        "}\";"
-        "document.getElementsByTagName('head')[0].appendChild(script);"
-        webView.stringByEvaluatingJavaScriptFromString(string)
-        webView.stringByEvaluatingJavaScriptFromString("ResizeImages();")
+
     }
 }
 
 extension ViewController_1_2 : UIScrollViewDelegate {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        
         if scrollView == self.view.subviews[0] as? UIScrollView {
             let width = scrollView.bounds.size.width
             pageControl.currentPage = Int((scrollView.contentOffset.x + width / 2) / width)
+        }
+        
+        if scrollView == self.view {
+            let aboveHeight = 130 + self.view.frame.height * 0.4
+            scrollView.contentSize.height = self.webView.scrollView.contentSize.height + aboveHeight + 20
+            
         }
         
     }
@@ -264,8 +260,8 @@ extension ViewController_1_2 {
         searchInfo.typeName = "commentList"
         searchInfo.itemID = item.itemID
         
-        let search = Search()
-        search.performSearchForText(searchInfo) { (_) -> Void in
+//        let search = Search()
+        Search.performSearchForText(searchInfo) { (search) -> Void in
             print(search.state)
             
             switch search.state {

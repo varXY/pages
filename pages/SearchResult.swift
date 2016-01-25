@@ -13,7 +13,24 @@ func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
 	return lhs.name.localizedStandardCompare(rhs.name) == NSComparisonResult.OrderedAscending
 }
 
+class Product {
+    
+    var itemid = ""
+    var title = ""
+    var price = ""
+    var brand = ""
+    var thumb = ""
+    var subheading = ""
+    var areaname = ""
+    var address = ""
+    var userid = ""
+    var company = ""
+    var star: Float = 0.0
+    
+}
+
 class Review {
+    
     var seller_star = ""
     var seller_qstar = ""
     var seller_astar = ""
@@ -22,6 +39,7 @@ class Review {
     var fromid = ""
     var seller_ctime = ""
     var isAnonymous = ""
+    
 }
 
 class ApplyItem {

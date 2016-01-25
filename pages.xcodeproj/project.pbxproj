@@ -21,6 +21,8 @@
 		C3466C2C1C3CB68E00979FAF /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466C2B1C3CB68E00979FAF /* TableViewController.swift */; };
 		C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C360329D1C3A05F2008852CA /* ViewController_1.swift */; };
 		C36032A21C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */; };
+		C37248331C55F6EF00EDD735 /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37248321C55F6EF00EDD735 /* ProductCell.swift */; };
+		C37248351C55FD3800EDD735 /* ViewController_3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37248341C55FD3800EDD735 /* ViewController_3_1.swift */; };
 		C377DB981C4A122A00F92F34 /* ViewController_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = C377DB971C4A122A00F92F34 /* ViewController_3.swift */; };
 		C377DB9A1C4A187800F92F34 /* HudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C377DB991C4A187800F92F34 /* HudView.swift */; };
 		C37BDEF61C44CEFC00917F7D /* LoadServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37BDEF51C44CEFC00917F7D /* LoadServices.swift */; };
@@ -65,6 +67,8 @@
 		C360329F1C3A6890008852CA /* pages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "pages-Bridging-Header.h"; sourceTree = "<group>"; };
 		C36032A01C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
 		C36032A11C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
+		C37248321C55F6EF00EDD735 /* ProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
+		C37248341C55FD3800EDD735 /* ViewController_3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_3_1.swift; sourceTree = "<group>"; };
 		C377DB971C4A122A00F92F34 /* ViewController_3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController_3.swift; sourceTree = "<group>"; };
 		C377DB991C4A187800F92F34 /* HudView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HudView.swift; sourceTree = "<group>"; };
 		C37BDEF51C44CEFC00917F7D /* LoadServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadServices.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 				C341A7FB1C3DF037003049EE /* FilterView.swift */,
 				C3E015781C48C5AF00DCDAFA /* SubscribeTableView.swift */,
 				C3466C271C3CB32000979FAF /* CarServiceCell.swift */,
+				C37248321C55F6EF00EDD735 /* ProductCell.swift */,
 				C393843F1C4DD677009EDC19 /* SubscribeListTableView.swift */,
 				C39384411C4DD709009EDC19 /* CarServiceListCell.swift */,
 				C3DF86211C50B40A00C51697 /* CommentCell.swift */,
@@ -186,8 +191,9 @@
 				C339C2281C4095C700947247 /* MainNavigationController.swift */,
 				C3D73FD11C34AEF500C82CFA /* ViewController.swift */,
 				C360329D1C3A05F2008852CA /* ViewController_1.swift */,
-				C377DB971C4A122A00F92F34 /* ViewController_3.swift */,
 				C3F68C091C43479700BB7F50 /* ViewController_1_2.swift */,
+				C377DB971C4A122A00F92F34 /* ViewController_3.swift */,
+				C37248341C55FD3800EDD735 /* ViewController_3_1.swift */,
 				C3A7C75E1C350E2400E6DC4B /* WebViewController.swift */,
 				C31385461C45E404004ED847 /* WebViewController_1.swift */,
 				C3466C2B1C3CB68E00979FAF /* TableViewController.swift */,
@@ -342,6 +348,7 @@
 				C3E015791C48C5AF00DCDAFA /* SubscribeTableView.swift in Sources */,
 				C3466C261C3CA9CA00979FAF /* String+en:decode.swift in Sources */,
 				C3DF86241C50BDC500C51697 /* ReviewListTableViewController.swift in Sources */,
+				C37248331C55F6EF00EDD735 /* ProductCell.swift in Sources */,
 				C3E015771C48C1BB00DCDAFA /* SubscribeViewController.swift in Sources */,
 				C360329E1C3A05F2008852CA /* ViewController_1.swift in Sources */,
 				C377DB981C4A122A00F92F34 /* ViewController_3.swift in Sources */,
@@ -355,6 +362,7 @@
 				C3A7C75F1C350E2400E6DC4B /* WebViewController.swift in Sources */,
 				C36032A21C3A6891008852CA /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				C3466C281C3CB32000979FAF /* CarServiceCell.swift in Sources */,
+				C37248351C55FD3800EDD735 /* ViewController_3_1.swift in Sources */,
 				C3238A2D1C3F9B3500081E6E /* LoadMoreTableFooterView.swift in Sources */,
 				C341A7FC1C3DF037003049EE /* FilterView.swift in Sources */,
 				C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */,

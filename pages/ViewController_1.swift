@@ -34,7 +34,7 @@ class ViewController_1: UIViewController {
     var contentView = UIView()
     
     var switchOn = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()

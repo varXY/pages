@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     
     var segmentControl = UISegmentedControl()
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.backgroundColor()
@@ -47,6 +48,7 @@ class ViewController: UIViewController {
                 numbers = [3, -1, "增值服务"]
             case 3:
                 let newsVC = ViewController_3()
+                newsVC.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(newsVC, animated: true)
 //                let webVC = WebViewController()
 //                let url = NSURL(string: "http://www.cncar.net/jq/carservice-infoindex.html")!
