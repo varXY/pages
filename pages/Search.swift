@@ -184,7 +184,7 @@ class Search {
             urlString = String(format: "http://www.cncar.net/api/app/server/commentList.php?itemid=%@&page=%@&rows=%@", searchInfo.itemID, "1", "60").URLEncodedString()!
             
         case "products":
-            urlString = String(format: "http://www.cncar.net/api/app/product/productList.php?kindid=%@&page=%@&rows=%@", searchInfo.productKindID, "1", "60").URLEncodedString()!
+            urlString = String(format: "http://www.cncar.net/api/app/product/productList.php?kindId=%@&page=%@&rows=%@", searchInfo.productKindID, "1", "30").URLEncodedString()!
             
             urlString += searchInfo.addition.URLEncodedString()!
             
@@ -222,36 +222,10 @@ class Search {
         var products = [Product]()
         
         if type == "item" {
-            let body = dictionary["body"]  as! NSNumber as Float
-            if body == 1 {
-                let csItem = CSItem()
-                csItem.itemID = dictionary["itemid"] as! NSString as String
-                csItem.title = dictionary["title"] as! NSString as String
-                csItem.titleIntact = dictionary["titleintact"] as! NSString as String
-                csItem.subHeading = dictionary["subheading"] as! NSString as String
-                csItem.price = dictionary["price"] as! NSString as String
-                csItem.thumb = dictionary["thumb"] as! NSString as String
-                csItem.thumb1 = dictionary["thumb1"] as! NSString as String
-                csItem.thumb2 = dictionary["thumb2"] as! NSString as String
-                csItem.thumb3 = dictionary["thumb3"] as! NSString as String
-                csItem.thumb4 = dictionary["thumb4"] as! NSString as String
-//                csItem.comid = dictionary["comid"] as! NSString as String
-                csItem.company = dictionary["company"] as! NSString as String
-                csItem.address = dictionary["address"] as! NSString as String
-                csItem.telephone = dictionary["telephone"] as! NSString as String
-                csItem.longitude = dictionary["longitude"] as! NSString as String
-                csItem.latitude = dictionary["latitude"] as! NSString as String
-                csItem.content = dictionary["content"] as! NSString as String
-                csItem.star = dictionary["star"] as! NSNumber as Float
-                csItem.qstar = dictionary["qstar"] as! NSNumber as Float
-                csItem.astar = dictionary["astar"] as! NSNumber as Float
-                
-                return [csItem]
-            } else {
-                let csItem = CSItem()
-                return [csItem]
-            }
-
+            var csItem = CSItem()
+            let anyObject = dictionary as AnyObject
+            csItem = (anyObject => CSItem.self)!
+            return [csItem]
         }
         
         if type == "subscribe" {
@@ -277,6 +251,23 @@ class Search {
         }
         
 		if let array: AnyObject = dictionary["rows"] {
+            
+            if let theArray = array as? [AnyObject] {
+                switch type {
+                case "carService":
+                    CSResults = theArray.flatMap({ $0 => CSResult.self })
+                case "applyItem":
+                    appleItems = theArray.flatMap({ $0 => ApplyItem.self })
+                case "commentList":
+                    reviews = theArray.flatMap({ $0 => Review.self })
+                case "products":
+                    products = theArray.flatMap({ $0 => Product.self })
+                default:
+                    break
+                }
+                
+            }
+            
 
 			for resultDict in array as! [AnyObject] {
 				if let resultDict = resultDict as? [String: AnyObject] {
@@ -297,67 +288,9 @@ class Search {
                         searchResult.latitude = resultDict["latitude"] as! NSString as String
                         searchResults.append(searchResult)
                         
-                    case "carService":
-                        let csResult = CSResult()
-                        csResult.itemid = resultDict["itemid"] as! NSString as String
-                        csResult.title = resultDict["title"] as! NSString as String
-                        csResult.price = resultDict["price"] as! NSString as String
-                        csResult.thumb = resultDict["thumb"] as! NSString as String
-                        csResult.distance = resultDict["distance"] as! NSNumber as Float
-                        csResult.address = resultDict["address"] as! NSString as String
-                        csResult.company = resultDict["company"] as! NSString as String
-                        csResult.star = resultDict["star"] as! NSNumber as Float
-                        CSResults.append(csResult)
-                        
                     case "ad":
                         imageURLs.append(resultDict["image_src"] as! NSString as String)
-//                        imageURLs.append(resultDict["image_url"] as! NSString as String)
-//                        imageURLs.append(resultDict["image_alt"] as! NSString as String)
-                        
-                    case "applyItem":
-                        let applyItem = ApplyItem()
-                        applyItem.itemid = resultDict["itemid"] as! NSString as String
-                        applyItem.title = resultDict["title"] as! NSString as String
-                        applyItem.price = resultDict["price"] as! NSString as String
-                        applyItem.thumb = resultDict["thumb"] as! NSString as String
-                        applyItem.company = resultDict["company"] as! NSString as String
-                        applyItem.servertime = resultDict["servertime"] as! NSString as String
-                        applyItem.note = resultDict["note"] as! NSString as String
-                        applyItem.status = resultDict["status"] as! NSString as String
-                        applyItem.status_note = resultDict["status_note"] as! NSString as String
-                        applyItem.mallid = resultDict["mallid"] as! NSString as String
-                        applyItem.comfirm_time = resultDict["comfirm_time"] as! NSString as String
-                        applyItem.comfirm_note = resultDict["comfirm_note"] as! NSString as String
-                        applyItem.evaluation = resultDict["evaluation"] as! NSString as String
-                        appleItems.append(applyItem)
-                        
-                    case "commentList":
-                        let review = Review()
-                        review.seller_star = resultDict["seller_star"] as! NSString as String
-                        review.seller_qstar = resultDict["seller_qstar"] as! NSString as String
-                        review.seller_astar = resultDict["seller_astar"] as! NSString as String
-                        review.seller_comment = resultDict["seller_comment"] as! NSString as String
-                        review.buyer = resultDict["buyer"] as! NSString as String
-                        review.fromid = resultDict["fromid"] as! NSString as String
-                        review.seller_ctime = resultDict["seller_ctime"] as! NSString as String
-                        review.isAnonymous = resultDict["isAnonymous"] as! NSString as String
-                        reviews.append(review)
-                        
-                    case "products":
-                        let product = Product()
-                        product.itemid = resultDict["itemid"] as! NSString as String
-                        product.title = resultDict["title"] as! NSString as String
-                        product.subheading = resultDict["subheading"] as! NSString as String
-                        product.brand = resultDict["brand"] as! NSString as String
-                        product.price = resultDict["price"] as! NSString as String
-                        product.thumb = resultDict["thumb"] as! NSString as String
-                        product.userid = resultDict["userid"] as! NSString as String
-                        product.company = resultDict["company"] as! NSString as String
-                        product.areaname = resultDict["areaname"] as! NSString as String
-                        product.address = resultDict["address"] as! NSString as String
-                        product.star = resultDict["star"] as! NSNumber as Float
-                        products.append(product)
-                        
+                    
                     default:
                         break
                     }

@@ -64,12 +64,18 @@ class ViewController_3_1: UIViewController {
     
     func performSearch(searchInfo: SearchInfo) {
         search.performSearchForText(searchInfo) { (_) -> Void in
+            print(self.search.state)
+            
             switch self.search.state {
             case .Results(let items):
                 if let products = items as? [Product] {
                     self.results = products
                     self.tableView.reloadData()
                 }
+                
+            case .NoResults:
+                self.results.removeAll()
+                self.tableView.reloadData()
                 
             default:
                 break

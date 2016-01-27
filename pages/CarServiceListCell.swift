@@ -49,6 +49,7 @@ class CarServiceListCell: UITableViewCell {
         picView.frame = CGRect(x: 5, y: companyLabel.frame.origin.y + companyLabel.frame.height, width: imageViewSize.width, height: imageViewSize.height)
         picView.backgroundColor = UIColor.backgroundColor()
         picView.contentMode = .ScaleAspectFill
+        picView.clipsToBounds = true
         contentView.addSubview(picView)
         
         productLabel.frame = CGRect(x: 5 + imageViewSize.width + 5, y: picView.frame.origin.y, width: imageViewSize.width * 2 - 5 , height: 35)

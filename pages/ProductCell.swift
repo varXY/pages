@@ -92,7 +92,7 @@ class ProductCell : UITableViewCell {
         if let range = result.price.rangeOfString(".00") {
             result.price.removeRange(range)
         }
-        priceLabel.text = result.price != "0.01" ? "¥" + result.price : "面议"
+        priceLabel.text = result.price == "0.01" || result.price == "0" ? "面议" : "¥" + result.price
         
         companyLabel.text = result.company
         companyLabel.sizeToFit()
