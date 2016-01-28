@@ -477,7 +477,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 125
+        return 135
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -571,30 +571,40 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
         
         
         
-//        let webVC = WebViewController()
-//        let string = String(format: "http://www.cncar.net/api/app/server/content.php?itemid=%@", results[indexPath.row].itemid)
-//        webVC.url = NSURL(string: string)!
-//        self.navigationController?.pushViewController(webVC, animated: true)
     }
 }
 
 extension ViewController_1 : CompanySelected {
     
     func companySelected(name: String) {
-//        print(__FUNCTION__)
-//        
-//        for item in results {
-//            if item.company == name && switchOn == false {
-//                switchOn = true
-//                let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, name).URLEncodedString()
-//                let url = NSURL(string: urlString!)
-//                    
-//                let webVC = WebViewController()
-//                webVC.url = url!
-//                webVC.title = name
-//                self.navigationController?.pushViewController(webVC, animated: true)
-//            }
-//        }
+        print(__FUNCTION__)
+        
+        for item in results {
+            if item.company == name && switchOn == false {
+                switchOn = true
+                
+                var searchInfo = SearchInfo()
+                searchInfo.typeName = "company"
+                searchInfo.userID = item.userid
+                
+                Search.performSearchForText(searchInfo) { (search) -> Void in
+                    switch search.state {
+                    case .Results(let items):
+                        if let company = items[0] as? Company {
+                            let companyVC = CompanyViewController()
+                            companyVC.company = company
+                            
+                            self.navigationController?.pushViewController(companyVC, animated: true)
+                            
+                        }
+                        
+                    default:
+                        print(search.state)
+                    }
+                }
+
+            }
+        }
         
         
     }

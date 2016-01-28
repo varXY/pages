@@ -36,6 +36,8 @@ struct SearchInfo {
     var page = "1"
     
     var productKindID = "0"
+    
+    var userID = ""
 }
 
 class Search {
@@ -188,6 +190,9 @@ class Search {
             
             urlString += searchInfo.addition.URLEncodedString()!
             
+        case "company":
+            urlString = String(format: "http://www.cncar.net/api/app/company/company.php?userid=%@", searchInfo.userID).URLEncodedString()!
+            
         default:
             break
         }
@@ -226,6 +231,14 @@ class Search {
             let anyObject = dictionary as AnyObject
             csItem = (anyObject => CSItem.self)!
             return [csItem]
+        }
+        
+        if type == "company" {
+            var company = Company()
+            print(dictionary)
+            let anyObject = dictionary as AnyObject
+            company = (anyObject => Company.self)!
+            return [company]
         }
         
         if type == "subscribe" {

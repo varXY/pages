@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C302F35C1C59A0A90043E35D /* CompanyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C302F35B1C59A0A90043E35D /* CompanyViewController.swift */; };
 		C31385471C45E404004ED847 /* WebViewController_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31385461C45E404004ED847 /* WebViewController_1.swift */; };
 		C316E0A41C58A5E500E0F0DF /* JSONModelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316E0A31C58A5E500E0F0DF /* JSONModelMapper.swift */; };
 		C317748B1C4F32E1006F885C /* Array+removeAtIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C317748A1C4F32E1006F885C /* Array+removeAtIndexes.swift */; };
@@ -52,6 +53,7 @@
 		24CE9DFF9073B361C0F41BED /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		3B9D795083DE1040DC8777C3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7233EC591672C24A8BA5CD8B /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C302F35B1C59A0A90043E35D /* CompanyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompanyViewController.swift; sourceTree = "<group>"; };
 		C31385461C45E404004ED847 /* WebViewController_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController_1.swift; sourceTree = "<group>"; };
 		C316E0A31C58A5E500E0F0DF /* JSONModelMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONModelMapper.swift; sourceTree = "<group>"; };
 		C317748A1C4F32E1006F885C /* Array+removeAtIndexes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+removeAtIndexes.swift"; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				C3E015761C48C1BB00DCDAFA /* SubscribeViewController.swift */,
 				C3DF861F1C50633B00C51697 /* CommentViewController.swift */,
 				C3DF86231C50BDC500C51697 /* ReviewListTableViewController.swift */,
+				C302F35B1C59A0A90043E35D /* CompanyViewController.swift */,
 				C33E4C0F1C488477008C5873 /* View */,
 				C33E4C101C48849A008C5873 /* Model */,
 				C33E4C0E1C488432008C5873 /* Extension */,
@@ -371,6 +374,7 @@
 				C3F68C0C1C4356F400BB7F50 /* UIColor+CustomColor.swift in Sources */,
 				C3DF86221C50B40A00C51697 /* CommentCell.swift in Sources */,
 				C316E0A41C58A5E500E0F0DF /* JSONModelMapper.swift in Sources */,
+				C302F35C1C59A0A90043E35D /* CompanyViewController.swift in Sources */,
 				C3D73FE21C34AF8B00C82CFA /* PView.swift in Sources */,
 				C317748B1C4F32E1006F885C /* Array+removeAtIndexes.swift in Sources */,
 				C377DB9A1C4A187800F92F34 /* HudView.swift in Sources */,

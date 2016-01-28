@@ -8,6 +8,12 @@
 
 import Foundation
 
+let ScreenBounds = UIScreen.mainScreen().bounds
+let ScreenWidth = ScreenBounds.width
+let ScreenHeight = ScreenBounds.height
+
+let BarHeight = UIApplication.sharedApplication().statusBarFrame.height
+
 class PModel {
     
     var titles = ["汽车维修", "汽车美容" ,"增值服务", "行业资讯"]

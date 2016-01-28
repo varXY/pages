@@ -13,6 +13,62 @@ func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
 	return lhs.name.localizedStandardCompare(rhs.name) == NSComparisonResult.OrderedAscending
 }
 
+//"body": 1,
+//"userid": "1452",
+//"company": "河北邢台九龙峡旅游区自驾车房车露营地",
+//"areaname": "河北邢台市",
+//"address": "河北省邢台县浆水镇营房台村",
+//"content": " 企业简介",
+//"thumb": "http://www.hjinfo-img.com/cncar-img/201601/08/11-42-05-25-1452.jpg",
+//"longitude": null,
+//"latitude": null,
+//"telephone": "0319-3661078",
+//"modelss": [
+//{
+//"models": "国内车",
+//"models_itemid": "东风本田CRV,上海大众,大海大众奥迪,"
+//},
+//{
+//"models": "进口车",
+//"models_itemid": "进口车1,进口车2,进口车5,"
+//}
+//],
+//"items": [
+//{
+//"item_name": "服务项目",
+//"item_value": "测试1,测试2,测试3"
+//}
+//]
+
+class Company_modelss: NSObject {
+    var models = ""
+    var models_itemid = ""
+}
+
+class Company_items: NSObject {
+    var item_name = ""
+    var item_value = ""
+}
+
+class Company: NSObject {
+    
+    var body: Float = 0.0
+    var userid = ""
+    var company = ""
+    var areaname = ""
+    var truename = ""
+    var address = ""
+    var content = ""
+    var thumb = ""
+    var email = ""
+    var longitude: AnyObject?
+    var latitude: AnyObject?
+    var telephone = ""
+    var modelss = NSArray()
+    var items = NSArray()
+    
+}
+
 class Product: NSObject {
     
     var itemid = ""
@@ -96,6 +152,7 @@ class CSResult: NSObject {
     var address = ""
     var company = ""
     var chexing = ""
+    var userid = ""
     var star: Float = 0.0
 }
 

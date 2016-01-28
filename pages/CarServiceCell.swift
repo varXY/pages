@@ -35,7 +35,7 @@ class CarServiceCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = UIColor.backgroundColor()
         
-        let contentView = UIView(frame: CGRectMake(0, 5, UIScreen.mainScreen().bounds.width, 120))
+        let contentView = UIView(frame: CGRectMake(0, 5, UIScreen.mainScreen().bounds.width, 130))
         contentView.backgroundColor = UIColor.whiteColor()
         
         picView.frame = CGRect(x: 5, y: 5, width: 110, height: 110)
@@ -55,20 +55,30 @@ class CarServiceCell : UITableViewCell {
         distanceLabel.textColor = UIColor.lightGrayColor()
         distanceLabel.font = UIFont.italicSystemFontOfSize(12)
         
-        priceLabel.frame = CGRectMake(contentView.frame.width - 110, roundPic.frame.origin.y - 5, 100, 30)
+        priceLabel.frame = CGRectMake(contentView.frame.width - 110, starLabel.frame.origin.y, 100, 30)
         priceLabel.textColor = UIColor.themeColor()
         priceLabel.textAlignment = .Right
         
-        companyLabel.frame = CGRectMake(0, 0, contentView.frame.width - contentView.frame.height - 100, 10)
+        let companyButton = UIButton(type: .System)
+        companyButton.frame = CGRectMake(contentView.frame.width - 70, starLabel.frame.origin.y + 30, 60, 35)
+        companyButton.backgroundColor = UIColor.themeColor()
+        companyButton.tintColor = UIColor.whiteColor()
+        companyButton.setTitle("进入店铺", forState: .Normal)
+        companyButton.titleLabel!.font = UIFont.boldSystemFontOfSize(13)
+        companyButton.layer.cornerRadius = 5
+        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
+        
+        companyLabel.frame = CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10)
         companyLabel.textColor = UIColor.lightGrayColor()
         companyLabel.font = UIFont.italicSystemFontOfSize(12)
         
-        let companyButton = UIButton(frame: CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10))
-//        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
-        companyButton.addSubview(companyLabel)
+        //        let companyButton = UIButton(frame: CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10))
+        //        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
+        //        companyButton.addSubview(companyLabel)
+        //        companyButton.enabled = false
         
         
-        locationLabel.frame = CGRectMake(titleLabel.frame.origin.x, companyButton.frame.origin.y + companyButton.frame.height + 10, titleLabel.frame.width, 10)
+        locationLabel.frame = CGRectMake(titleLabel.frame.origin.x, companyLabel.frame.origin.y + companyLabel.frame.height + 10 + 10, titleLabel.frame.width, 10)
         locationLabel.textColor = UIColor.lightGrayColor()
         locationLabel.font = UIFont.italicSystemFontOfSize(12)
         
@@ -87,6 +97,7 @@ class CarServiceCell : UITableViewCell {
         contentView.addSubview(roundPic)
         contentView.addSubview(distanceLabel)
         contentView.addSubview(priceLabel)
+        contentView.addSubview(companyLabel)
         contentView.addSubview(companyButton)
         contentView.addSubview(locationLabel)
         
@@ -109,7 +120,12 @@ class CarServiceCell : UITableViewCell {
         if let range = result.price.rangeOfString(".00") {
             result.price.removeRange(range)
         }
-        priceLabel.text = result.price != "0.01" ? "¥" + result.price : "面议"
+        
+        priceLabel.text = result.price == "0.01" ? "面议" : "¥" + result.price
+        
+        if result.price == "0" {
+            priceLabel.text = "面议"
+        }
         
         companyLabel.text = result.company
         
@@ -117,16 +133,16 @@ class CarServiceCell : UITableViewCell {
     }
     
     func companySelected(button: UIButton) {
-        if let label = button.subviews[0] as? UILabel {
-            delegate?.companySelected(label.text!)
-            //                if item.company == label.text {
-            //                    let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, item.company).URLEncodedString()
-            //                    let url = NSURL(string: urlString!)
-            //
-            //                    delegate?.companySelected(url!)
-            //                }
-            
-        }
+        
+        delegate?.companySelected(self.companyLabel.text!)
+        //                if item.company == label.text {
+        //                    let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, item.company).URLEncodedString()
+        //                    let url = NSURL(string: urlString!)
+        //
+        //                    delegate?.companySelected(url!)
+        //                }
+        
+        
     }
     
     
