@@ -95,15 +95,14 @@ class CompanyViewController: UIViewController {
         
         tableView.contentOffset = CGPoint(x: 0, y: 0)
         
-//        if let imageView = tableView.tableHeaderView as? UIImageView {
-//            if let size = imageView.image?.size {
-//                print(size)
-//                imageView.bounds.origin = CGPointZero
-//                imageView.bounds.size = size
-//                self.tableView.tableHeaderView = imageView
-//            }
-//            
-//        }
+        
+        
+        if let imageView = tableView.tableHeaderView as? UIImageView {
+            let url = NSURL(string: "http://www.hjinfo-img.com/cncar-img/201506/08/09-06-45-69-1.jpg")!
+            UIImage.imageWithURL(url, done: { (image) -> Void in
+                imageView.image = image
+            })
+        }
     }
     
     func getToolBar() {
@@ -297,7 +296,10 @@ extension CompanyViewController: UIWebViewDelegate {
         let addressLabel = UILabel(frame: CGRectMake(10, detailWebView.frame.height, ScreenWidth - 20, 200))
             addressLabel.numberOfLines = 0
         addressLabel.font = UIFont.systemFontOfSize(16)
-        addressLabel.text = "区域：\(company.areaname) \n地址：\(company.address)"
+        let string_0 = NSMutableAttributedString(string: "经营配件车型 > \n\n提供服务 >\n\n" + "区域：\(company.areaname) \n地址：\(company.address)", attributes: [NSForegroundColorAttributeName: UIColor.blackColor()])
+        let range = string_0.mutableString.rangeOfString("经营配件车型 > \n\n提供服务 >\n\n")
+        string_0.addAttributes([NSForegroundColorAttributeName: UIColor.themeColor()], range: range)
+        addressLabel.attributedText = string_0
         addressLabel.sizeToFit()
         detailHeight = detailWebView.frame.height + addressLabel.frame.height
         webView.addSubview(addressLabel)

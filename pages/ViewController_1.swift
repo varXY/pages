@@ -574,7 +574,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension ViewController_1 : CompanySelected {
+extension ViewController_1: CompanySelected {
     
     func companySelected(name: String) {
         print(__FUNCTION__)

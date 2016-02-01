@@ -16,7 +16,7 @@ let BarHeight = UIApplication.sharedApplication().statusBarFrame.height
 
 class PModel {
     
-    var titles = ["汽车维修", "汽车美容" ,"增值服务", "行业资讯"]
+    var titles = ["汽车维修", "汽车美容" ,"增值服务", "产品资讯"]
     
     func getURL(index: Int) -> NSURL? {
         var url = NSURL()

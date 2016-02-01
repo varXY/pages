@@ -16,8 +16,11 @@ class ViewController_3: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "行业资讯"
-        self.view.backgroundColor = UIColor.lightGrayColor()
+        self.title = "产品资讯"
+        self.view.backgroundColor = UIColor.backgroundColor()
+        
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        self.navigationItem.leftBarButtonItem = quitButton
         
         customView.getPageForCSNews(self)
     }
@@ -35,6 +38,10 @@ class ViewController_3: UIViewController {
 //    39---改装类
 //    13---护理类
     
+    func quit() {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     func openURL(sender: UIButton) {
         print(sender.tag)
         
@@ -42,13 +49,39 @@ class ViewController_3: UIViewController {
         
         var searchInfo = SearchInfo()
         searchInfo.typeName = "products"
+        searchInfo.body = ["1", "1", "1", "1"]
         searchInfo.productKindID = String(kindID)
         
         let VC_3_1 = ViewController_3_1()
         VC_3_1.searchInfo = searchInfo
+        VC_3_1.title = titleForButtonIndex(sender.tag)
         
         self.navigationController?.pushViewController(VC_3_1, animated: true)
     }
+    
+    func titleForButtonIndex(index: Int) -> String {
+        switch index {
+        case 10104:
+            return "保养件"
+        case 10105:
+            return "维修件"
+        case 10106:
+            return "外饰件"
+        case 10107:
+            return "内饰件"
+        case 10108:
+            return "电子类"
+        case 10109:
+            return "户外类"
+        case 10110:
+            return "改装类"
+        case 10111:
+            return "内饰件"
+        default:
+            return "产品详情"
+        }
+    }
+    
     
     func kindIDForButtonIndex(index: Int) -> Int {
         switch index {
@@ -60,6 +93,8 @@ class ViewController_3: UIViewController {
             return 230
         case 10110:
             return 39
+        case 10111:
+            return 13
         default:
             return 0
         }

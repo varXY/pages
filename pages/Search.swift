@@ -79,6 +79,9 @@ class Search {
                         } else {
                             search.state = .Results(searchResults)
                         }
+                    } else if let array = search.parseJOSN_1(data!) {
+                        let results = array.flatMap( { $0 => Product_catID.self })
+                        search.state = .Results(results)
                     }
                 } else {
                     print(httpResponse.statusCode)
@@ -186,12 +189,18 @@ class Search {
             urlString = String(format: "http://www.cncar.net/api/app/server/commentList.php?itemid=%@&page=%@&rows=%@", searchInfo.itemID, "1", "60").URLEncodedString()!
             
         case "products":
-            urlString = String(format: "http://www.cncar.net/api/app/product/productList.php?kindId=%@&page=%@&rows=%@", searchInfo.productKindID, "1", "30").URLEncodedString()!
+            urlString = String(format: "http://www.cncar.net/api/app/product/productList.php?kindId=%@&page=%@&rows=%@", searchInfo.productKindID, searchInfo.body[3], "30").URLEncodedString()!
             
             urlString += searchInfo.addition.URLEncodedString()!
             
         case "company":
             urlString = String(format: "http://www.cncar.net/api/app/company/company.php?userid=%@", searchInfo.userID).URLEncodedString()!
+            
+        case "productDetail":
+            urlString = String(format: "http://www.cncar.net/api/app/product/content.php?itemid=%@&username=%@", searchInfo.itemID, searchInfo.userName).URLEncodedString()!
+            
+        case "productCatID":
+            urlString = String(format: "http://www.cncar.net/api/app/product/kindList.php?kindId=%@", searchInfo.productKindID).URLEncodedString()!
             
         default:
             break
@@ -203,7 +212,7 @@ class Search {
 
 	private func parseJOSN(data: NSData) -> [String: AnyObject]?  {
 
-		do {
+        do {
 			let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0)) as? [String: AnyObject]
 			return json
 		} catch let error as NSError {
@@ -214,6 +223,20 @@ class Search {
 
 		return nil
 	}
+    
+    private func parseJOSN_1(data: NSData) -> NSArray?  {
+    
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0)) as? NSArray
+            return json
+        } catch let error as NSError {
+            print("JSON Error: \(error)")
+        } catch {
+            print("Unknown JSON Error")
+        }
+        
+        return nil
+    }
 
 	// MARK: - ParseDictionary
 
@@ -235,10 +258,23 @@ class Search {
         
         if type == "company" {
             var company = Company()
-            print(dictionary)
             let anyObject = dictionary as AnyObject
             company = (anyObject => Company.self)!
             return [company]
+        }
+        
+        if type == "productDetail" {
+            var productDetail = ProductDetail()
+            let anyObject  = dictionary as AnyObject
+            productDetail = (anyObject => ProductDetail.self)!
+            return [productDetail]
+        }
+        
+        if type == "productCatID" {
+            var productCatID = Product_catID()
+            let anyObject  = dictionary as AnyObject
+            productCatID = (anyObject => Product_catID.self)!
+            return [productCatID]
         }
         
         if type == "subscribe" {
@@ -246,7 +282,6 @@ class Search {
                 let csItem = CSItem()
                 csItem.title = body
                 return [csItem]
-
         }
         
         if type == "dealWithApply" {

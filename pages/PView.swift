@@ -32,15 +32,35 @@ class PView: NSObject {
     var atTheEnd = false
     
     func getSliderForProductTable(VC: ViewController_3_1) {
-        let imageNames = ["adbar1", "adbar2"]
+        var imageNames = [String]()
         
-        let frame = CGRect(x: 0, y: 40, width: self.screenSize.width, height: self.screenSize.height * 0.354 - 40)
-        let scrolling = self.scrollingImagesView(frame, imagesCount: imageNames.count, imageNames: imageNames)
-        scrolling.delegate = self
-        VC.contentView.addSubview(scrolling)
+        var searchInfo = SearchInfo()
+        searchInfo.typeName = "ad"
+        searchInfo.pid = "43"
         
-        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
-        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+        Search.performSearchForText(searchInfo) { (search) -> Void in
+            switch search.state {
+            case .Results(let strings):
+                for string in strings {
+                    if string as! String != "" {
+                        imageNames.append(string as! String)
+                    }
+                }
+                
+                let frame = CGRect(x: 0, y: 40, width: self.screenSize.width, height: self.screenSize.height * 0.354 - 40)
+                let scrolling = self.scrollingImagesView(frame, imagesCount: imageNames.count, imageNames: imageNames)
+                scrolling.delegate = self
+                VC.contentView.addSubview(scrolling)
+                
+                let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+                NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+                
+            default:
+                break
+            }
+        }
+        
+        
     }
     
     func getScrollingForTable(VC: ViewController_1) {
@@ -189,16 +209,15 @@ class PView: NSObject {
         addTarget(VC, view: eightButton)
         
         let news0 = ["222如何辨别真假NGK火花塞", "更换汽车火花塞，不懂型号，不懂如何辨别品牌的真假，使用之后有可能导致仪表灯跟指针出现故障。"]
-        let news1 = ["111如何辨别真假NGK火花塞", "更换汽车火花塞，不懂型号，不懂如何辨别品牌的真假，使用之后有可能导致仪表灯跟指针出现故障。"]
-        let allNews = [news0, news1]
-        let imageNames1 = ["news_1", "news_1"]
+        let allNews = [news0]
+        let imageNames1 = ["news_1"]
         let infoView = infomationView(point1.y + eightButton.frame.height + 10, allNews: allNews, imageNames: imageNames1)
         scrollView.addSubview(infoView)
         addTarget(VC, view: infoView)
         
-        let names1 = ["product0", "product1", "product2", "product3", "product4", "product5", "product6", "product7"]
+        let names1 = ["product0", "product1", "product2", "product3"]
         let point2 = CGPointMake(0, infoView.frame.origin.y + infoView.frame.height + 10)
-        let serviceView = serviceButtonView(point2, title: "产品", names: names1)
+        let serviceView = produnctButtonView_1(point2, title: "推荐产品", names: names1)
         
         scrollView.addSubview(serviceView)
         addTarget(VC, view: serviceView)
@@ -436,7 +455,8 @@ class PView: NSObject {
     // MARK: NewsView
     
     func infomationView(y: CGFloat, allNews: [[String]], imageNames: [String]) -> UIView {
-        let infomationView = UIView(frame: CGRectMake(0, y, screenSize.width, screenSize.height * h2))
+        let extraHeight = allNews.count == 1 ? (screenSize.height * h2 - 40) / 2 : 0.0
+        let infomationView = UIView(frame: CGRectMake(0, y, screenSize.width, screenSize.height * h2 - extraHeight))
         infomationView.backgroundColor = UIColor.whiteColor()
         
         let point0 = CGPointMake(0, 0)
@@ -519,7 +539,9 @@ class PView: NSObject {
             let height = i < 4 ? 50 : (screenSize.height * h3 - 70) / 2 + 60
             let point = CGPointMake(((screenSize.width - 50) / 4 + 10) * CGFloat(scale) + 10, CGFloat(height))
             
-            let button = serviceButton(point, name: names[i])
+            let size = CGSizeMake((screenSize.width - 50) / 4, (screenSize.height * h3 - 70) / 2)
+            let frame = CGRect(origin: point, size: size)
+            let button = serviceButton(frame, name: names[i])
             button.tag = 10114 + i
             view.addSubview(button)
         }
@@ -527,11 +549,36 @@ class PView: NSObject {
         return view
     }
     
-    func serviceButton(point: CGPoint, name: String) -> UIButton {
+    func produnctButtonView_1(point: CGPoint, title: String, names: [String]) -> UIView {
+        let view = UIView()
+        view.frame.origin = point
+        let height = screenSize.height * h3 + (screenSize.height * h2 - 40) / 2
+        view.frame.size = CGSizeMake(screenSize.width, height)
+        view.backgroundColor = UIColor.whiteColor()
+        
+        let point0 = CGPointMake(0, 0)
+        let tView = titleView(point0, title: title)
+        view.addSubview(tView)
+        
+        for i in 0..<names.count {
+            let scale = i < 2 ? i : i - 2
+            let height = i < 2 ? 50 : (view.frame.height - 70) / 2 + 60
+            let point = CGPointMake(((screenSize.width - 30) / 2 + 10) * CGFloat(scale) + 10, CGFloat(height))
+            
+            let size = CGSizeMake((screenSize.width - 30) / 2, (view.frame.height - 70) / 2)
+            let frame = CGRect(origin: point, size: size)
+            let button = serviceButton(frame, name: names[i])
+            button.tag = 10114 + i
+            view.addSubview(button)
+        }
+        
+        return view
+    }
+    
+    func serviceButton(frame: CGRect, name: String) -> UIButton {
         let button = UIButton(type: .System)
         button.backgroundColor = UIColor.whiteColor()
-        button.frame.origin = point
-        button.frame.size = CGSizeMake((screenSize.width - 50) / 4, (screenSize.height * h3 - 70) / 2)
+        button.frame = frame
         button.layer.borderWidth = 0.5
         button.layer.borderColor = UIColor.lightGrayColor().CGColor
         

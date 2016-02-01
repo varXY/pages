@@ -54,12 +54,14 @@ class ProductCell : UITableViewCell {
         companyLabel.textColor = UIColor.lightGrayColor()
         companyLabel.font = UIFont.italicSystemFontOfSize(12)
         
-
-        
-//        let companyButton = UIButton(frame: CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10))
-//        //        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
-//        companyButton.addSubview(companyLabel)
-        
+        let companyButton = UIButton(type: .System)
+        companyButton.frame = CGRectMake(contentView.frame.width - 70, starLabel.frame.origin.y + 30, 60, 35)
+        companyButton.backgroundColor = UIColor.themeColor()
+        companyButton.tintColor = UIColor.whiteColor()
+        companyButton.setTitle("进入店铺", forState: .Normal)
+        companyButton.titleLabel!.font = UIFont.boldSystemFontOfSize(13)
+        companyButton.layer.cornerRadius = 5
+        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
         
         locationLabel.frame = CGRectMake(titleLabel.frame.origin.x, companyLabel.frame.origin.y + companyLabel.frame.height + 20, titleLabel.frame.width, 10)
         locationLabel.textColor = UIColor.lightGrayColor()
@@ -71,6 +73,7 @@ class ProductCell : UITableViewCell {
         contentView.addSubview(starLabel)
         contentView.addSubview(brandLabel)
         contentView.addSubview(companyLabel)
+        contentView.addSubview(companyButton)
         contentView.addSubview(priceLabel)
         contentView.addSubview(locationLabel)
         
@@ -97,24 +100,15 @@ class ProductCell : UITableViewCell {
         companyLabel.text = result.company
         companyLabel.sizeToFit()
         
-        let roundPic = UIImageView(image: UIImage(named: "companyicon"))
-        roundPic.frame = CGRectMake(companyLabel.frame.origin.x + companyLabel.frame.width + 5, companyLabel.frame.origin.y, 20, 20)
-        self.contentView.addSubview(roundPic)
+//        let roundPic = UIImageView(image: UIImage(named: "companyicon"))
+//        roundPic.frame = CGRectMake(companyLabel.frame.origin.x + companyLabel.frame.width + 5, companyLabel.frame.origin.y, 20, 20)
+//        self.contentView.addSubview(roundPic)
         
         locationLabel.text = result.address
     }
     
     func companySelected(button: UIButton) {
-        if let label = button.subviews[0] as? UILabel {
-            delegate?.companySelected(label.text!)
-            //                if item.company == label.text {
-            //                    let urlString = String(format: "http://www.cncar.net/jq/carservice-companydetail.html?itemid=%@&name=%@", item.itemid, item.company).URLEncodedString()
-            //                    let url = NSURL(string: urlString!)
-            //
-            //                    delegate?.companySelected(url!)
-            //                }
-            
-        }
+        delegate?.companySelected(self.companyLabel.text!)
     }
     
     
