@@ -39,7 +39,7 @@ class ViewController_1: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.lightGrayColor()
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(ViewController_1.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
         tableView.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - 64)
@@ -74,7 +74,7 @@ class ViewController_1: UIViewController {
         
         let listButtonFrame = CGRectMake(20, self.view.frame.height - 134, 61, 61)
         let listButton = pView.appointmentListButton(listButtonFrame)
-        listButton.addTarget(self, action: "openList", forControlEvents: .TouchUpInside)
+        listButton.addTarget(self, action: #selector(ViewController_1.openList), forControlEvents: .TouchUpInside)
         self.view.addSubview(listButton)
     
     }
@@ -577,7 +577,7 @@ extension ViewController_1: UITableViewDataSource, UITableViewDelegate {
 extension ViewController_1: CompanySelected {
     
     func companySelected(name: String) {
-        print(__FUNCTION__)
+        print(#function)
         
         for item in results {
             if item.company == name && switchOn == false {

@@ -23,7 +23,7 @@ class ViewController_3_2: UIViewController {
         self.navigationItem.title = item.title
         self.view.backgroundColor = UIColor.whiteColor()
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(ViewController_3_2.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
         
@@ -67,8 +67,8 @@ class ViewController_3_2: UIViewController {
     }
     
     func getToolBar() {
-        let toolBarItem_0 = UIBarButtonItem(title: "地图导航", style: .Plain, target: self, action: "navi")
-        let toolBarItem_1 = UIBarButtonItem(title: "拨打电话", style: .Plain, target: self, action: "call")
+        let toolBarItem_0 = UIBarButtonItem(title: "地图导航", style: .Plain, target: self, action: #selector(ViewController_3_2.navi))
+        let toolBarItem_1 = UIBarButtonItem(title: "拨打电话", style: .Plain, target: self, action: #selector(ViewController_3_2.call))
 //        let toolBarItem_2 = UIBarButtonItem(title: "查看评论", style: .Plain, target: self, action: "seeComment")
         
         let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)

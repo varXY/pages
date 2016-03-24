@@ -61,7 +61,7 @@ class ProductCell : UITableViewCell {
         companyButton.setTitle("进入店铺", forState: .Normal)
         companyButton.titleLabel!.font = UIFont.boldSystemFontOfSize(13)
         companyButton.layer.cornerRadius = 5
-        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
+        companyButton.addTarget(self, action: #selector(ProductCell.companySelected(_:)), forControlEvents: .TouchUpInside)
         
         locationLabel.frame = CGRectMake(titleLabel.frame.origin.x, companyLabel.frame.origin.y + companyLabel.frame.height + 20, titleLabel.frame.width, 10)
         locationLabel.textColor = UIColor.lightGrayColor()

@@ -71,7 +71,7 @@ class SubscribeListTableView: UITableView {
     }
     
     func makeDatas() {
-        page++
+        page += 1
         
         var itemSearchInfo = SearchInfo()
         itemSearchInfo.typeName = "applyItem"
@@ -113,7 +113,7 @@ class SubscribeListTableView: UITableView {
             button.setTitleColor(UIColor.themeColor(), forState: .Selected)
             button.setTitleColor(UIColor.themeColor(), forState: .Highlighted)
             button.tag = 100 + i
-            button.addTarget(self, action: "filter:", forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: #selector(SubscribeListTableView.filter(_:)), forControlEvents: .TouchUpInside)
             contentView.addSubview(button)
         }
         

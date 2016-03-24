@@ -18,7 +18,7 @@ class ReviewListTableViewController: UITableViewController {
         
         self.title = "评论"
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(ReviewListTableViewController.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
     }

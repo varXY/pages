@@ -17,7 +17,7 @@ class WebViewController_1: UIViewController {
         super.viewDidLoad()
         self.fd_interactivePopDisabled = true
                 
-        let quitButton = UIBarButtonItem(barButtonSystemItem: .Stop, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(barButtonSystemItem: .Stop, target: self, action: #selector(quit))
         self.navigationItem.rightBarButtonItem = quitButton
         
         let webView = UIWebView(frame: view.bounds)

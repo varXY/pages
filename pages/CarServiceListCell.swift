@@ -115,7 +115,7 @@ class CarServiceListCell: UITableViewCell {
             button.layer.cornerRadius = 8
             button.layer.borderWidth = 0.5
             button.tag = 1000 + i
-            button.addTarget(self, action: "actionButtonTapped:", forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: #selector(actionButtonTapped(_:)), forControlEvents: .TouchUpInside)
             button.layer.borderColor = UIColor.grayColor().CGColor
             contentView.addSubview(button)
             

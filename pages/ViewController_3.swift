@@ -19,7 +19,7 @@ class ViewController_3: UIViewController {
         self.title = "产品资讯"
         self.view.backgroundColor = UIColor.backgroundColor()
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(ViewController_3.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
         customView.getPageForCSNews(self)

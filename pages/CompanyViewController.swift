@@ -42,7 +42,7 @@ class CompanyViewController: UIViewController {
         self.view.backgroundColor = UIColor.backgroundColor()
         self.title = company.company
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(CompanyViewController.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
         cellModel.append(company)
@@ -106,8 +106,8 @@ class CompanyViewController: UIViewController {
     }
     
     func getToolBar() {
-        let toolBarItem_0 = UIBarButtonItem(title: "地图导航", style: .Plain, target: self, action: "navi")
-        let toolBarItem_1 = UIBarButtonItem(title: "拨打电话", style: .Plain, target: self, action: "call")
+        let toolBarItem_0 = UIBarButtonItem(title: "地图导航", style: .Plain, target: self, action: #selector(CompanyViewController.navi))
+        let toolBarItem_1 = UIBarButtonItem(title: "拨打电话", style: .Plain, target: self, action: #selector(CompanyViewController.call))
         
         let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         
@@ -130,7 +130,7 @@ class CompanyViewController: UIViewController {
             button.setTitle(titles[i], forState: .Normal)
             button.tintColor = UIColor.blackColor()
             button.tag = 100 + i
-            button.addTarget(self, action: "headerButtonTapped:", forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: #selector(CompanyViewController.headerButtonTapped(_:)), forControlEvents: .TouchUpInside)
             contentView.addSubview(button)
         }
         

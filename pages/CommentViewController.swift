@@ -74,10 +74,10 @@ class CommentViewController: UIViewController {
         self.view.backgroundColor = UIColor.whiteColor()
         self.title = "评价"
         
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(CommentViewController.cancel))
         self.navigationItem.leftBarButtonItem = cancelButton
         
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done")
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(CommentViewController.done))
         self.navigationItem.rightBarButtonItem = doneButton
         self.navigationItem.rightBarButtonItem?.enabled = false
 
@@ -244,7 +244,7 @@ class CommentViewController: UIViewController {
         
         doneButton.layer.cornerRadius = 3
         
-        doneButton.addTarget(self, action: "quitInput", forControlEvents: .TouchUpInside)
+        doneButton.addTarget(self, action: #selector(CommentViewController.quitInput), forControlEvents: .TouchUpInside)
         doneButton.tag = 102
         self.view.addSubview(doneButton)
         

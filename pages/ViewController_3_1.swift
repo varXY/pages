@@ -42,7 +42,7 @@ class ViewController_3_1: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.backgroundColor()
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(ViewController_3_1.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
         tableView.frame = CGRectMake(0, 0, self.view.frame.width, self.view.frame.height - 64)
@@ -163,7 +163,7 @@ class ViewController_3_1: UIViewController {
             button.tag = 1000 + i
             contentView.addSubview(button)
             
-            button.addTarget(self, action: "filter:", forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: #selector(ViewController_3_1.filter(_:)), forControlEvents: .TouchUpInside)
             
             
         }
@@ -249,7 +249,7 @@ class ViewController_3_1: UIViewController {
             button.tintColor = UIColor.blackColor()
             button.layer.borderWidth = 0.5
             button.layer.borderColor = UIColor.lightGrayColor().CGColor
-            button.addTarget(self, action: "smallButtonTapped:", forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: #selector(ViewController_3_1.smallButtonTapped(_:)), forControlEvents: .TouchUpInside)
             contentView.addSubview(button)
             
             if x == 10 + (contentView.frame.width - 20) / 4 * CGFloat(3) {

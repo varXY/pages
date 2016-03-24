@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         segmentControl = UISegmentedControl(items: pModel.titles)
         for i in 0..<4 { segmentControl.setWidth(75, forSegmentAtIndex: i) }
         segmentControl.selectedSegmentIndex = UISegmentedControlNoSegment
-        segmentControl.addTarget(self, action: "segmentSelected:", forControlEvents: UIControlEvents.AllEvents)
+        segmentControl.addTarget(self, action: #selector(segmentSelected(_:)), forControlEvents: UIControlEvents.AllEvents)
         self.navigationItem.titleView = segmentControl
         
         pView.getPageForCarServices(self)
@@ -71,14 +71,15 @@ class ViewController: UIViewController {
         
         var searchInfo = SearchInfo()
         searchInfo.typeName = "carService"
-        searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
+		guard let number = numbers[0] as Int else { return }
+        searchInfo.body = ["\(number)", "114.22329534", "30.55964711", "1", "30",]
         searchInfo.userName = "15927284689"
 //        searchInfo.CSKindID = numbers[1] as! Int
         searchInfo.CSKindID = 0
         
         let VC = ViewController_1()
         VC.searchInfo = searchInfo
-        VC.title = numbers[2] as? String
+        VC.title = numbers[2] as String
         VC.filterTitle = "全部"
         VC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(VC, animated: true)
@@ -162,7 +163,11 @@ class ViewController: UIViewController {
             
             searchInfo.typeName = "carService"
             searchInfo.userName = "15927284689"
-            searchInfo.body = ["\(numbers[0] as! Int)", "114.22329534", "30.55964711", "1", "30",]
+			var number = 0
+			if let int = numbers[0] as Int {
+				number = int
+			}
+            searchInfo.body = ["\(number)", "114.22329534", "30.55964711", "1", "30",]
             searchInfo.CSKindID = numbers[1] as! Int
             
             let VC = ViewController_1()

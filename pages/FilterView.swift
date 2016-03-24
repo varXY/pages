@@ -86,7 +86,7 @@ class FilterView: UIView {
             button.layer.borderColor = UIColor.lightGrayColor().CGColor
             
             if let btn = button as? UIButton {
-                btn.addTarget(self, action: "topButtonTapped:", forControlEvents: .TouchUpInside)
+                btn.addTarget(self, action: #selector(FilterView.topButtonTapped(_:)), forControlEvents: .TouchUpInside)
             }
             
             button.addSubview(imageView)
@@ -161,7 +161,7 @@ class FilterView: UIView {
             button.layer.borderWidth = 0.5
             button.layer.borderColor = UIColor.lightGrayColor().CGColor
             button.tag = 210 + i
-            button.addTarget(viewController, action: "smallFilterTapped:", forControlEvents: .TouchUpInside)
+			button.addTarget(viewController, action: #selector(ViewController_1.smallFilterTapped(_:)), forControlEvents: .TouchUpInside)
             contentView.addSubview(button)
         
         }
@@ -204,7 +204,7 @@ class FilterView: UIView {
             button.setTitle(titles[i], forState: .Normal)
             button.tintColor = UIColor.blackColor()
             button.tag = factor + i
-            button.addTarget(viewController, action: "smallFilterTapped:", forControlEvents: .TouchUpInside)
+            button.addTarget(viewController, action: #selector(ViewController_1.smallFilterTapped(_:)), forControlEvents: .TouchUpInside)
             contentView.addSubview(button)
 
         }

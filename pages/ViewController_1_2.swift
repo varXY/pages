@@ -23,7 +23,7 @@ class ViewController_1_2: UIViewController {
         self.navigationItem.title = item.title
         self.view.backgroundColor = UIColor.whiteColor()
         
-        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "quit")
+        let quitButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(ViewController_1_2.quit))
         self.navigationItem.leftBarButtonItem = quitButton
         
         
@@ -67,9 +67,9 @@ class ViewController_1_2: UIViewController {
     }
     
     func getToolBar() {
-        let toolBarItem_0 = UIBarButtonItem(title: "地图导航", style: .Plain, target: self, action: "navi")
-        let toolBarItem_1 = UIBarButtonItem(title: "拨打电话", style: .Plain, target: self, action: "call")
-        let toolBarItem_2 = UIBarButtonItem(title: "查看评论", style: .Plain, target: self, action: "seeComment")
+        let toolBarItem_0 = UIBarButtonItem(title: "地图导航", style: .Plain, target: self, action: #selector(ViewController_1_2.navi))
+        let toolBarItem_1 = UIBarButtonItem(title: "拨打电话", style: .Plain, target: self, action: #selector(ViewController_1_2.call))
+        let toolBarItem_2 = UIBarButtonItem(title: "查看评论", style: .Plain, target: self, action: #selector(ViewController_1_2.seeComment))
         
         let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         
@@ -137,7 +137,7 @@ class ViewController_1_2: UIViewController {
         button.tintColor = UIColor.whiteColor()
         button.layer.cornerRadius = 7
         button.setTitle("立即预约", forState: .Normal)
-        button.addTarget(self, action: "MakeAppointment", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(ViewController_1_2.MakeAppointment), forControlEvents: .TouchUpInside)
         contentView.addSubview(button)
         
         let width = (contentView.frame.width - 10) / 5

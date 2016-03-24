@@ -52,7 +52,7 @@ class PView: NSObject {
                 scrolling.delegate = self
                 VC.contentView.addSubview(scrolling)
                 
-                let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+                let timer = NSTimer(timeInterval: 3.0, target: self, selector: #selector(PView.movePic(_:)), userInfo: scrolling, repeats: true)
                 NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
                 
             default:
@@ -98,7 +98,7 @@ class PView: NSObject {
                     scrolling.delegate = self
                     VC.contentView.addSubview(scrolling)
                     
-                    let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+                    let timer = NSTimer(timeInterval: 3.0, target: self, selector: #selector(PView.movePic(_:)), userInfo: scrolling, repeats: true)
                     NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
                     
                 default:
@@ -132,7 +132,7 @@ class PView: NSObject {
         scrollView.addSubview(scrolling)
         addTarget(VC, view: scrolling)
         
-        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+        let timer = NSTimer(timeInterval: 3.0, target: self, selector: #selector(PView.movePic(_:)), userInfo: scrolling, repeats: true)
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
         
         let frame_2 = CGRect(x: 0, y: scrolling.frame.origin.y + scrolling.frame.height, width: VC.view.frame.width, height: VC.view.frame.height * h2_1)
@@ -161,7 +161,7 @@ class PView: NSObject {
         glassyView.alpha = 0.4
         scrollView.addSubview(glassyView)
         
-        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+        let timer = NSTimer(timeInterval: 3.0, target: self, selector: #selector(PView.movePic(_:)), userInfo: scrolling, repeats: true)
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
         
         let names = ["汽车保养", "电脑解码", "轮胎轮毂", "故障维修", "电瓶电路", "玻璃换装", "空调水箱", "钣金油漆"]
@@ -199,7 +199,7 @@ class PView: NSObject {
         scrollView.addSubview(scrolling)
         addTarget(VC, view: scrolling)
         
-        let timer = NSTimer(timeInterval: 3.0, target: self, selector: "movePic:", userInfo: scrolling, repeats: true)
+        let timer = NSTimer(timeInterval: 3.0, target: self, selector: #selector(PView.movePic(_:)), userInfo: scrolling, repeats: true)
         NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
         
         let names = ["保养件", "维修件", "外饰件", "内饰件", "电子类", "户外类", "改装类", "内饰类"]
@@ -227,7 +227,7 @@ class PView: NSObject {
     func addTarget(VC: UIViewController, view: UIView) {
         for i in view.subviews {
             if let button = i as? UIButton {
-                button.addTarget(VC, action: "openURL:", forControlEvents: .TouchUpInside)
+                button.addTarget(VC, action: #selector(UIApplication.openURL(_:)), forControlEvents: .TouchUpInside)
             }
         }
     }

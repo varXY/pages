@@ -66,7 +66,7 @@ class CarServiceCell : UITableViewCell {
         companyButton.setTitle("进入店铺", forState: .Normal)
         companyButton.titleLabel!.font = UIFont.boldSystemFontOfSize(13)
         companyButton.layer.cornerRadius = 5
-        companyButton.addTarget(self, action: "companySelected:", forControlEvents: .TouchUpInside)
+        companyButton.addTarget(self, action: #selector(CarServiceCell.companySelected(_:)), forControlEvents: .TouchUpInside)
         
         companyLabel.frame = CGRectMake(titleLabel.frame.origin.x, roundPic.frame.origin.y + roundPic.frame.height + 10, contentView.frame.width - contentView.frame.height - 100, 10)
         companyLabel.textColor = UIColor.lightGrayColor()

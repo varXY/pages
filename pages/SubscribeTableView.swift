@@ -40,7 +40,7 @@ class SubscribeTableView: UITableView {
         doneButton.backgroundColor = UIColor.themeColor()
         doneButton.layer.cornerRadius = 10
         doneButton.setTitle("确定", forState: .Normal)
-        doneButton.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
+        doneButton.addTarget(self, action: #selector(SubscribeTableView.done), forControlEvents: .TouchUpInside)
         
         let contentView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 50))
         contentView.addSubview(doneButton)
@@ -91,7 +91,7 @@ class SubscribeTableView: UITableView {
             let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 216))
             datePicker.tag = 100
             datePicker.date = dueDate
-            datePicker.addTarget(self, action: Selector("dateChanged:"), forControlEvents: .ValueChanged)
+            datePicker.addTarget(self, action: #selector(SubscribeTableView.dateChanged(_:)), forControlEvents: .ValueChanged)
             datePickerCell.contentView.addSubview(datePicker)
         }
     }
@@ -268,7 +268,7 @@ class SubscribeTableView: UITableView {
             textField.autocorrectionType = .No
             textField.tag = 101
             textField.delegate = self
-            textField.addTarget(self, action: "editChanged:", forControlEvents: UIControlEvents.EditingChanged)
+            textField.addTarget(self, action: #selector(SubscribeTableView.editChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
             textField.becomeFirstResponder()
         }
     }

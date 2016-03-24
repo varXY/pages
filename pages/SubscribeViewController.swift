@@ -25,7 +25,7 @@ class SubscribeViewController: UIViewController {
         
         self.title == "预约" ? showSubscribeTableView() : showSubscribeListTableView()
         
-        let backButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: "back")
+        let backButton = UIBarButtonItem(image: UIImage(named: "back"), style: .Plain, target: self, action: #selector(SubscribeViewController.back))
         self.navigationItem.leftBarButtonItem = backButton
         
         if self.title != "预约" {
